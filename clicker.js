@@ -75,11 +75,11 @@ const clicker = async () => {
     isBotRuning = true;
     try {
       for (const user of users) {
-        var res = await runPythonScript('mainBlum.py', user, 40000);
+        var res = await runPythonScript('mainBlum.py', user, 100000);
         console.log('Node 1 end res===', res);
-        var res = await runPythonScript('mainMMProBump.py', user, 40000);
+        var res = await runPythonScript('mainMMProBump.py', user, 60000);
         console.log('Node 2 end res===', res);
-        var res = await runPythonScript('mainXEmpire.py', user, 90000);
+        var res = await runPythonScript('mainXEmpire.py', user, 120000);
         console.log('Node 3 end res===', res);
       }
       var res = await runPythonScript('mainMemeFi.py');
@@ -99,9 +99,9 @@ const startBot = async () => {
       isBotRuning = true;
       try {
         for (const user of users) {
-          var res = await runPythonScript('mainBlum.py', user, 40000);
+          var res = await runPythonScript('mainBlum.py', user, 100000);
           console.log('Node 1 end res===', res);
-          var res = await runPythonScript('mainMMProBump.py', user, 40000);
+          var res = await runPythonScript('mainMMProBump.py', user, 60000);
           console.log('Node 2 end res===', res);
           var res = await runPythonScript('mainXEmpire.py', user, 120000);
           console.log('Node 3 end res===', res);
