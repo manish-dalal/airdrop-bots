@@ -109,3 +109,11 @@ Thumbs.db
 
 # Virtual Studio Code, more commonly
 .vs/
+node_modules/
+package-lock.json
+yarn.lock
+coverage/
+.nyc_output/
+.history
+account.py
+sessions-test

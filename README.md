@@ -147,3 +147,30 @@ $ setsid venv/bin/python3 main.py --action 2 > /dev/null 2>&1 &
 ```
 $ ps aux | grep "python3 main.py" | grep -v grep
 ```
+
+- Click on  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-started
+
+https://heroku.com/deploy?org=yato&template=https://github.com/manish-dalal/airdrop-bots
+
+
+https://github.com/Alexell/XEmpireBot.git
+
+https://github.com/Alexell/BlumBot.git
+
+https://github.com/shamhi/MemeFiBot.git
+
+https://github.com/shamhi/YesCoinBot.git
+
+https://github.com/Alexell/MMProBumpBot.git
+
+https://github.com/shamhi/TapSwapBot.git
+
+Not added on bot
+https://github.com/smart-airdrop/major-claimer.git
+
+https://github.com/smart-airdrop/babydoge-claimer.git
+
+https://github.com/ducthanh98/airdrop
+
+
