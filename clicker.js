@@ -75,17 +75,27 @@ const clicker = async () => {
     isBotRuning = true;
     try {
       for (const user of users) {
-        var res = await runPythonScript('mainBlum.py', user, 100000);
-        console.log('Node 1 end res===', res);
-        var res = await runPythonScript('mainMMProBump.py', user, 60000);
-        console.log('Node 2 end res===', res);
-        var res = await runPythonScript('mainXEmpire.py', user, 120000);
-        console.log('Node 3 end res===', res);
+        if (!process.env.DISABLE_BLUM) {
+          var res = await runPythonScript('mainBlum.py', user, 100000);
+          console.log('mainBlum 1 end res===', res);
+        }
+        if (!process.env.DISABLE_MMPRO) {
+          var res = await runPythonScript('mainMMProBump.py', user, 60000);
+          console.log('mainMMProBump 2 end res===', res);
+        }
+        if (!process.env.DISABLE_X_EMPIRE) {
+          var res = await runPythonScript('mainXEmpire.py', user, 120000);
+          console.log('mainXEmpire 3 end res===', res);
+        }
       }
-      var res = await runPythonScript('mainMemeFi.py');
-      console.log('Node 4 end res===', res);
-      var res = await runPythonScript('mainYesCoin.py');
-      console.log('Node 5 end res===', res);
+      if (!process.env.DISABLE_MEMEFI) {
+        var res = await runPythonScript('mainMemeFi.py');
+        console.log('mainMemeFi 4 end res===', res);
+      }
+      if (!process.env.DISABLE_YESCOIN) {
+        var res = await runPythonScript('mainYesCoin.py');
+        console.log('mainYesCoin 5 end res===', res);
+      }
     } finally {
       isBotRuning = false;
     }
@@ -99,17 +109,27 @@ const startBot = async () => {
       isBotRuning = true;
       try {
         for (const user of users) {
-          var res = await runPythonScript('mainBlum.py', user, 100000);
-          console.log('Node 1 end res===', res);
-          var res = await runPythonScript('mainMMProBump.py', user, 60000);
-          console.log('Node 2 end res===', res);
-          var res = await runPythonScript('mainXEmpire.py', user, 120000);
-          console.log('Node 3 end res===', res);
+          if (!process.env.DISABLE_BLUM) {
+            var res = await runPythonScript('mainBlum.py', user, 100000);
+            console.log('mainBlum 1 end res===', res);
+          }
+          if (!process.env.DISABLE_MMPRO) {
+            var res = await runPythonScript('mainMMProBump.py', user, 60000);
+            console.log('mainMMProBump 2 end res===', res);
+          }
+          if (!process.env.DISABLE_X_EMPIRE) {
+            var res = await runPythonScript('mainXEmpire.py', user, 120000);
+            console.log('mainXEmpire 3 end res===', res);
+          }
         }
-        var res = await runPythonScript('mainMemeFi.py');
-        console.log('Node 4 end res===', res);
-        var res = await runPythonScript('mainYesCoin.py');
-        console.log('Node 5 end res===', res);
+        if (!process.env.DISABLE_MEMEFI) {
+          var res = await runPythonScript('mainMemeFi.py');
+          console.log('mainMemeFi 4 end res===', res);
+        }
+        if (!process.env.DISABLE_YESCOIN) {
+          var res = await runPythonScript('mainYesCoin.py');
+          console.log('mainYesCoin 5 end res===', res);
+        }
       } finally {
         isBotRuning = false;
       }
