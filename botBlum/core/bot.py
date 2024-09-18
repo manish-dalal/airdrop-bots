@@ -173,8 +173,8 @@ class CryptoBot:
 			return False
 
 	async def perform_friend_rewards(self) -> None:
-		balance_url = 'https://gateway.blum.codes/v1/friends/balance'
-		claim_url  = 'https://gateway.blum.codes/v1/friends/claim'
+		balance_url = 'https://user-domain.blum.codes/v1/friends/balance'
+		claim_url  = 'https://user-domain.blum.codes/v1/friends/claim'
 		try:
 			await self.http_client.options(balance_url)
 			response = await self.http_client.post(balance_url)
@@ -241,7 +241,7 @@ class CryptoBot:
 				await asyncio.sleep(delay=3)
 			
 	async def perform_tasks(self) -> None:
-		url = 'https://game-domain.blum.codes/api/v1/tasks'
+		url = 'https://earn-domain.blum.codes/api/v1/tasks'
 		try:
 			await self.http_client.options(url)
 			response = await self.http_client.get(url)
@@ -252,22 +252,40 @@ class CryptoBot:
 			for category in response_json:
 				tasks = category.get('tasks', [])
 				for task in tasks:
-					if started == 2: break # start a maximum of 2 tasks at time
-					if completed == 2: break # complete a maximum of 2 tasks at time
-					if task['status'] == 'FINISHED': continue
-					if task['isHidden'] == True: continue
+					if started == 2 or completed == 2: break
+					if task['status'] == 'FINISHED'or task.get('isHidden', False): continue
+					if 'socialSubscription' not in task or task.get('socialSubscription', {}).get('openInTelegram', False): continue
 					log.info(f"{self.session_name} | Processing task {task['id']}")
 					if task['status'] == 'NOT_STARTED':
-						await self.http_client.post(f"https://game-domain.blum.codes/api/v1/tasks/{task['id']}/start")
+						await self.http_client.post(f"https://earn-domain.blum.codes/api/v1/tasks/{task['id']}/start")
 						await asyncio.sleep(random.randint(4, 8))
 						started += 1
 					elif task['status'] == 'READY_FOR_CLAIM':
-						await self.http_client.post(f"https://game-domain.blum.codes/api/v1/tasks/{task['id']}/claim")
+						await self.http_client.post(f"https://earn-domain.blum.codes/api/v1/tasks/{task['id']}/claim")
 						await asyncio.sleep(1)
 						log.success(f"{self.session_name} | Task {task['id']} completed and reward claimed")
 						self.errors = 0
 						await asyncio.sleep(random.randint(2, 4))
 						completed += 1
+				sub_sections = category.get('subSections', [])
+				for sub_section in sub_sections:
+					tasks = sub_section.get('tasks', [])
+					for task in tasks:
+						if started == 2 or completed == 2: break
+						if task['status'] == 'FINISHED' or task.get('isHidden', False): continue
+						if 'socialSubscription' not in task or task.get('socialSubscription', {}).get('openInTelegram', False): continue
+						log.info(f"{self.session_name} | Processing task {task['id']}")
+						if task['status'] == 'NOT_STARTED':
+							await self.http_client.post(f"https://earn-domain.blum.codes/api/v1/tasks/{task['id']}/start")
+							await asyncio.sleep(random.randint(4, 8))
+							started += 1
+						elif task['status'] == 'READY_FOR_CLAIM':
+							await self.http_client.post(f"https://earn-domain.blum.codes/api/v1/tasks/{task['id']}/claim")
+							await asyncio.sleep(1)
+							log.success(f"{self.session_name} | Task {task['id']} completed and reward claimed")
+							self.errors = 0
+							await asyncio.sleep(random.randint(2, 4))
+							completed += 1
 		except aiohttp.ClientResponseError as error:
 			if error.status == 401: self.authorized = False
 			self.errors += 1
@@ -279,7 +297,7 @@ class CryptoBot:
 			await asyncio.sleep(delay=3)
 
 	async def refresh_tokens(self) -> str | bool:
-		url = 'https://gateway.blum.codes/v1/auth/refresh'
+		url = 'https://user-domain.blum.codes/v1/auth/refresh'
 		try:
 			await self.http_client.options(url)
 			json_data = {'refresh': self.refresh_token}
@@ -372,9 +390,11 @@ class CryptoBot:
 						if await self.farming_claim():
 							log.success(f"{self.session_name} | Claim successful")
 							self.errors = 0
+						else: continue
 						if await self.farming_start():
 							log.success(f"{self.session_name} | Farming restarted successfully")
 							self.errors = 0
+						else: continue
 					
 					await asyncio.sleep(random.randint(2, 4))
 					await self.perform_tasks()

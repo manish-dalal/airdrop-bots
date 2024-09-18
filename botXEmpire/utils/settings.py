@@ -18,6 +18,7 @@ class Settings(BaseSettings):
 	
 	TAPS_ENABLED: bool = True
 	TAPS_PER_SECOND: list[int] = [20, 30] # tested with 4 fingers
+	INVEST_ENABLED: bool = True
 	PVP_ENABLED: bool = False
 	PVP_LEAGUE: str = 'auto'
 	PVP_UPGRADE_LEAGUE: bool = False
@@ -28,6 +29,8 @@ class Settings(BaseSettings):
 	IGNORED_SKILLS: list[str] = []
 	MINING_SKILLS_LEVEL: int = 10
 	PROTECTED_BALANCE: int = 0
+	DAY_MAIN_DELAY: int = 3600
+	NIGHT_MAIN_DELAY: int = 10800
 	REF_CODE: str = 'hero5120699507'
 
 	SLEEP_BETWEEN_START: list[int] = [20, 360]

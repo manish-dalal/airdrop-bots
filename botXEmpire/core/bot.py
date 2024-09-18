@@ -2,12 +2,13 @@ import asyncio, aiohttp, random, math, json, hashlib, traceback
 from time import time as time_now
 from zoneinfo import ZoneInfo
 from datetime import datetime, time
-from urllib.parse import unquote
+from urllib.parse import urlparse, parse_qs, unquote
 from aiohttp_proxy import ProxyConnector
 from better_proxy import Proxy
 from pyrogram import Client
 from pyrogram.errors import Unauthorized, UserDeactivated, AuthKeyUnregistered
-from pyrogram.raw.functions.messages import RequestWebView
+from pyrogram.raw.functions.messages import RequestAppWebView
+from pyrogram.raw.types import InputBotAppShortName
 
 from botXEmpire.utils.logger import log
 from botXEmpire.utils.settings import config
@@ -18,6 +19,8 @@ class CryptoBot:
 	def __init__(self, tg_client: Client):
 		self.session_name = tg_client.name
 		self.tg_client = tg_client
+		self.bot_peer = None
+		self.bot_username = 'empirebot'
 		self.user_id = None
 		self.api_url = 'https://api.xempire.io'
 		self.taps_limit = False
@@ -43,31 +46,56 @@ class CryptoBot:
 			if not self.tg_client.is_connected:
 				try:
 					await self.tg_client.connect()
+					if self.user_id is None:
+						user = await self.tg_client.get_me()
+						self.user_id = user.id
 				except (Unauthorized, UserDeactivated, AuthKeyUnregistered) as error:
 					raise RuntimeError(str(error)) from error
-			web_view = await self.tg_client.invoke(RequestWebView(
-				peer=await self.tg_client.resolve_peer('empirebot'),
-				bot=await self.tg_client.resolve_peer('empirebot'),
-				platform='android',
-				from_bot_menu=True,
-				url='https://game.xempire.io/',
-				start_param=config.REF_CODE
-			))
-			auth_url = web_view.url
-			tg_web_data = unquote(
-				string=auth_url.split('tgWebAppData=', maxsplit=1)[1].split('&tgWebAppVersion', maxsplit=1)[0])
 			
-			user_hash = tg_web_data[tg_web_data.find('hash=') + 5:]
+			dialogs = self.tg_client.get_dialogs()
+			async for dialog in dialogs:
+				if dialog.chat and dialog.chat.username and dialog.chat.username == self.bot_username:
+					break
+			
+			while self.bot_peer is None:
+				try:
+					self.bot_peer = await self.tg_client.resolve_peer(self.bot_username)
+				except FloodWait as error:
+					seconds = error.value
+					log.warning(f"{self.session_name} | Telegram required a wait of {seconds} seconds")
+					seconds += 60
+					log.info(f"{self.session_name} | Sleep {seconds} seconds")
+					await asyncio.sleep(seconds)
+			
+			ref_code = config.REF_CODE
+			app_params = {
+				'peer': self.bot_peer,
+				'app': InputBotAppShortName(bot_id=self.bot_peer, short_name='game'),
+				'platform': 'android',
+				'write_allowed': True
+			}
+			if str(self.user_id) not in ref_code: app_params['start_param'] = ref_code
+			web_view = await self.tg_client.invoke(RequestAppWebView(**app_params))
+			
+			parsed_url = urlparse(web_view.url)
+			tg_web_data = unquote(parsed_url.fragment.split("tgWebAppData=", maxsplit=1)[1].split('&tgWebAppVersion', maxsplit=1)[0])
+			params = parse_qs(tg_web_data)
+			chat_type = params.get('chat_type', [''])[0]
+			chat_instance = params.get('chat_instance', [''])[0]
+			user_hash = params.get('hash', [''])[0]
 			self.api_key = user_hash
 			if self.tg_client.is_connected:
 				await self.tg_client.disconnect()
 			
 			login_data = {'data': {
-					'initData' : tg_web_data,
-					'platform' : 'android',
-					'chatId' : ''
+					'chatId': '',
+					'chatInstance': chat_instance,
+					'chatType': chat_type,
+					'initData': tg_web_data,
+					'platform': 'android'
 				}
 			}
+			if str(self.user_id) not in ref_code: login_data['data']['startParam'] = ref_code
 			return login_data
 
 		except RuntimeError as error:
@@ -324,10 +352,16 @@ class CryptoBot:
 			log.error(f"{self.session_name} | Complete quest error: {str(error)}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
 			return False
 	
-	async def friend_reward(self, friend: int) -> bool:
-		url = self.api_url + '/friends/claim'
+	async def friend_reward(self, batch: bool = False, friend: int = 0) -> tuple[bool, list]:
+		url_claim = self.api_url + '/friends/claim'
+		url_batch = self.api_url + '/friends/claim/batch'
 		try:
-			json_data = {'data': friend}
+			if batch:
+				json_data = {}
+				url = url_batch
+			else:
+				json_data = {'data': friend}
+				url = url_claim
 			await self.set_sign_headers(data=json_data)
 			response = await self.http_client.post(url, json=json_data)
 			response.raise_for_status()
@@ -341,17 +375,17 @@ class CryptoBot:
 				self.update_level(level=int(response_json['data']['hero']['level']))
 				self.balance = int(response_json['data']['hero']['money'])
 				self.mph = int(response_json['data']['hero']['moneyPerHour'])
-				return True
-			else: return False
+				return True, response_json['data']['friends']
+			else: return False, []
 		except aiohttp.ClientResponseError as error:
 			if error.status == 401: self.authorized = False
 			self.errors += 1
 			log.error(f"{self.session_name} | Friend reward http error: {error.message}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
 			await asyncio.sleep(delay=3)
-			return False
+			return False, []
 		except Exception as error:
 			log.error(f"{self.session_name} | Friend reward error: {str(error)}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
-			return False
+			return False, []
 	
 	def get_tap_limit(self) -> int:
 		for level_info in self.dbData['dbLevels']:
@@ -523,7 +557,6 @@ class CryptoBot:
 			json_data = {'data': 'alexell'}
 			await self.set_sign_headers(data=json_data)
 			response = await self.http_client.post(url, json=json_data)
-			print("response", response)
 			if response.status in [200, 400, 401, 403]:
 				response_json = await response.json()
 				success = response_json.get('success', False)
@@ -624,6 +657,40 @@ class CryptoBot:
 		except Exception as error:
 			log.error(f"{self.session_name} | Improve skill error: {str(error)}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
 			return None
+	
+	async def open_boxes(self) -> None:
+		url_list = self.api_url + '/box/list'
+		url_open = self.api_url + '/box/open'
+		try:
+			json_data = {}
+			await self.set_sign_headers(data=json_data)
+			response = await self.http_client.post(url_list, json=json_data)
+			response.raise_for_status()
+			response_text = await response.text()
+			if config.DEBUG_MODE:
+				log.debug(f"{self.session_name} | Boxes list response:\n{response_text}")
+			response_json = json.loads(response_text)
+			success = response_json.get('success', False)
+			if success and response_json['data']:
+				for name, _ in response_json['data'].items():
+					json_data = {'data': name}
+					await self.set_sign_headers(data=json_data)
+					res = await self.http_client.post(url_open, json=json_data)
+					res.raise_for_status()
+					res_text = await res.text()
+					if config.DEBUG_MODE:
+						log.debug(f"{self.session_name} | Open box response:\n{res_text}")
+					res_json = json.loads(res_text)
+					success = res_json.get('success', False)
+					if success and res_json['data']['loot']:
+						log.success(f"{self.session_name} | Box {name} opened")
+		except aiohttp.ClientResponseError as error:
+			if error.status == 401: self.authorized = False
+			self.errors += 1
+			log.error(f"{self.session_name} | Check boxes http error: {error.message}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
+			await asyncio.sleep(delay=3)
+		except Exception as error:
+			log.error(f"{self.session_name} | Check boxes error: {str(error)}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
 
 	def update_level(self, level: int) -> None:
 		if self.level > 0 and level > self.level:
@@ -638,9 +705,10 @@ class CryptoBot:
 		except Exception as error:
 			log.error(f"{self.session_name} | Proxy: {proxy} | Error: {error}")
 
-	async def run(self, proxy: str | None) -> None:
-		proxy_conn = ProxyConnector().from_url(proxy) if proxy else None
-
+	async def run(self, sess_data: dict) -> None:
+		proxy = sess_data['proxy'] if sess_data['proxy'] else None
+		proxy_conn = ProxyConnector().from_url(sess_data['proxy']) if proxy else None
+		headers['User-Agent'] = sess_data['ua']
 		async with aiohttp.ClientSession(headers=headers, connector=proxy_conn) as http_client:
 			self.http_client = http_client
 			if proxy:
@@ -724,14 +792,28 @@ class CryptoBot:
 						await asyncio.sleep(random.randint(2, 4))
 						await self.daily_quests()
 						
+						await asyncio.sleep(random.randint(2, 4))
+						await self.open_boxes()
+						
+						await asyncio.sleep(random.randint(2, 4))
 						unrewarded_friends = [int(friend['id']) for friend in full_profile['friends'] if friend['bonusToTake'] > 0]
 						if unrewarded_friends:
 							log.info(f"{self.session_name} | Reward for friends available")
-							await asyncio.sleep(random.randint(2, 4))
+							
+							# Batch processing
+							while len(unrewarded_friends) >= 10:
+								success, friends = await self.friend_reward(batch=True)
+								if success:
+									log.success(f"{self.session_name} | Reward for 10 friends claimed")
+									unrewarded_friends = [int(friend['id']) for friend in friends if friend['bonusToTake'] > 0]
+								await asyncio.sleep(random.randint(2, 4))
+							
+							# Individual processing
 							for friend in unrewarded_friends:
-								await asyncio.sleep(random.randint(1, 2))
-								if await self.friend_reward(friend=friend):
+								success, _ = await self.friend_reward(batch=False, friend=friend)
+								if success:
 									log.success(f"{self.session_name} | Reward for friend {friend} claimed")
+								await asyncio.sleep(random.randint(1, 2))
 						
 						if config.PVP_ENABLED:
 							if self.dbData:
@@ -832,22 +914,23 @@ class CryptoBot:
 									log.success(f"{self.session_name} | Reward for daily rebus claimed")
 						
 						# Investing with external data for combo
-						helper = await self.get_helper()
-						if cur_time_gmt >= new_day_gmt and cur_time_gmt_s in helper:
-							helper = helper[cur_time_gmt_s]
-							if 'funds' in helper:
-								regular_funds = helper['funds'].get('regular', [])
-								special_fund = helper['funds'].get('special', None)
-								special_fund = special_fund if any(fund['key'] == special_fund for fund in self.dbData['dbFunds']) else None
-								current_funds = await self.get_funds_info()
-								await asyncio.sleep(random.randint(4, 8))
-								
-								if regular_funds and 'funds' in current_funds and not current_funds['funds']:
-									funds_to_invest = [special_fund] if special_fund else []
-									funds_to_invest += regular_funds[:2] if special_fund else regular_funds
-									for fund in funds_to_invest:
-										await self.invest(fund=fund, amount=calculate_bet(level=self.level, mph=self.mph, balance=self.balance))
-										await asyncio.sleep(random.randint(2, 4))
+						if config.INVEST_ENABLED:
+							helper = await self.get_helper()
+							if cur_time_gmt >= new_day_gmt and cur_time_gmt_s in helper:
+								helper = helper[cur_time_gmt_s]
+								if 'funds' in helper:
+									regular_funds = helper['funds'].get('regular', [])
+									special_fund = helper['funds'].get('special', None)
+									special_fund = special_fund if any(fund['key'] == special_fund for fund in self.dbData['dbFunds']) else None
+									current_funds = await self.get_funds_info()
+									await asyncio.sleep(random.randint(4, 8))
+									
+									if regular_funds and 'funds' in current_funds and not current_funds['funds']:
+										funds_to_invest = [special_fund] if special_fund else []
+										funds_to_invest += regular_funds[:2] if special_fund else regular_funds
+										for fund in funds_to_invest:
+											await self.invest(fund=fund, amount=calculate_bet(level=self.level, mph=self.mph, balance=self.balance))
+											await asyncio.sleep(random.randint(2, 4))
 						
 						# improve mining skills (+1 level to each per cycle)
 						if config.MINING_SKILLS_LEVEL > 0:
@@ -921,7 +1004,7 @@ class CryptoBot:
 					now = datetime.now().time()
 					if day_start <= now <= day_end:
 						log_end = '(daytime main delay)'
-						main_delay = 3600 # 1 hour delay during daytime
+						main_delay = config.DAY_MAIN_DELAY # delay during daytime
 						if config.TAPS_ENABLED and not self.taps_limit:
 							log_end = '(waiting for energy recovery)'
 							sleep_time = energy_recovery_time
@@ -932,7 +1015,7 @@ class CryptoBot:
 							sleep_time = main_delay
 					else:
 						log_end = '(night main delay)'
-						main_delay = 10800 # 3 hours delay at night
+						main_delay = config.NIGHT_MAIN_DELAY # delay at night
 						sleep_time = main_delay
 						main_actions = True
 						sum_delay = 0
@@ -953,8 +1036,8 @@ class CryptoBot:
 					log.error(f"{self.session_name} | Unknown error: {error}" + (f"\nTraceback: {traceback.format_exc()}" if config.DEBUG_MODE else ""))
 					await asyncio.sleep(delay=3)
 
-async def run_bot(tg_client: Client, proxy: str | None):
+async def run_bot(tg_client: Client, sess_data: dict):
 	try:
-		await CryptoBot(tg_client=tg_client).run(proxy=proxy)
+		await CryptoBot(tg_client=tg_client).run(sess_data=sess_data)
 	except RuntimeError as error:
 		log.error(f"{tg_client.name} | Session error: {str(error)}")
