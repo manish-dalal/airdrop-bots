@@ -173,4 +173,9 @@ https://github.com/smart-airdrop/babydoge-claimer.git
 
 https://github.com/ducthanh98/airdrop
 
+Python version 
+pyenv install --list | grep 3.11
+pyenv install 3.11.10  
+pyenv global 3.11.10  
+python --version 
 
