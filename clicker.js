@@ -88,7 +88,7 @@ const clicker = async () => {
           console.log('mainXEmpire 3 end res===', res);
         }
         if (!process.env.DISABLE_MOON_BIX) {
-          var res = await runPythonScript('mainMoonbix.py', user, 280000);
+          var res = await runPythonScript('mainMoonbix.py', user, 360000);
           console.log('mainMoonbix 4 end res===', res);
         }
       }
@@ -126,7 +126,7 @@ const startBot = async () => {
             console.log('mainXEmpire 3 end res===', res);
           }
           if (!process.env.DISABLE_MOON_BIX) {
-            var res = await runPythonScript('mainMoonbix.py', user, 280000);
+            var res = await runPythonScript('mainMoonbix.py', user, 360000);
             console.log('mainMoonbix 4 end res===', res);
           }
         }
