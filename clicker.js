@@ -87,14 +87,18 @@ const clicker = async () => {
           var res = await runPythonScript('mainXEmpire.py', user, 120000);
           console.log('mainXEmpire 3 end res===', res);
         }
+        if (!process.env.DISABLE_MOON_BIX) {
+          var res = await runPythonScript('mainMoonbix.py', user, 280000);
+          console.log('mainMoonbix 4 end res===', res);
+        }
       }
       if (!process.env.DISABLE_MEMEFI) {
         var res = await runPythonScript('mainMemeFi.py');
-        console.log('mainMemeFi 4 end res===', res);
+        console.log('mainMemeFi 5 end res===', res);
       }
       if (!process.env.DISABLE_YESCOIN) {
         var res = await runPythonScript('mainYesCoin.py');
-        console.log('mainYesCoin 5 end res===', res);
+        console.log('mainYesCoin 6 end res===', res);
       }
     } finally {
       isBotRuning = false;
@@ -121,14 +125,18 @@ const startBot = async () => {
             var res = await runPythonScript('mainXEmpire.py', user, 120000);
             console.log('mainXEmpire 3 end res===', res);
           }
+          if (!process.env.DISABLE_MOON_BIX) {
+            var res = await runPythonScript('mainMoonbix.py', user, 280000);
+            console.log('mainMoonbix 4 end res===', res);
+          }
         }
         if (!process.env.DISABLE_MEMEFI) {
           var res = await runPythonScript('mainMemeFi.py');
-          console.log('mainMemeFi 4 end res===', res);
+          console.log('mainMemeFi 5 end res===', res);
         }
         if (!process.env.DISABLE_YESCOIN) {
           var res = await runPythonScript('mainYesCoin.py');
-          console.log('mainYesCoin 5 end res===', res);
+          console.log('mainYesCoin 6 end res===', res);
         }
       } finally {
         isBotRuning = false;
