@@ -166,6 +166,8 @@ https://github.com/Alexell/MMProBumpBot.git
 
 https://github.com/shamhi/TapSwapBot.git
 
+https://github.com/vanhbakaa/moonbix-bot.git
+
 Not added on bot
 https://github.com/smart-airdrop/major-claimer.git
 

@@ -13,11 +13,12 @@ from better_proxy import Proxy
 
 from botMoonbix.config import settings
 from botMoonbix.utils import logger
-from botMoonbix.core.tapper import run_tapper
-from botMoonbix.core.tapperNoThread import run_tapper_no_thread
+from botMoonbix.core.tapper import run_tapper_no_thread
 from botMoonbix.core.registrator import register_sessions
 
-curr_version = "2.5.0"
+import importlib.util
+
+curr_version = "2.5.5"
 
 version = requests.get("https://raw.githubusercontent.com/vanhbakaa/moonbix-bot/refs/heads/main/version")
 version_ = version.text.strip()
@@ -38,6 +39,28 @@ Select an action:
 """
 
 global tg_clients
+
+
+def import_tapper():
+    # Define the relative file path
+    file_path = os.path.join(os.getcwd(), "bot/core/tapperCheatPoint.py")
+
+    # Define a module name for the imported module
+    module_name = "tapper"
+
+    # Check if the file exists
+    if os.path.exists(file_path):
+        # Dynamically load the module
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        tapper_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(tapper_module)
+        sys.modules[module_name] = tapper_module
+        print(f"Successfully imported '{file_path}' as module '{module_name}'")
+        return tapper_module
+    else:
+        print(f"Join my telegram channel to use this option!")
+        return None
+
 
 def get_session_names(username) -> list[str]:
 	session_path = Path('sessions')
@@ -103,7 +126,7 @@ async def process() -> None:
             if not action.isdigit():
                 logger.warning("Action must be number")
             elif action not in ["1", "2", "3"]:
-                logger.warning("Action must be 1, 2 or 3")
+                logger.warning("Action must be 1, 2, or 3")
             else:
                 action = int(action)
                 break
@@ -117,10 +140,13 @@ async def process() -> None:
 
 
     elif action == 3:
-        tg_clients = await get_tg_clients()
+        tapper = import_tapper()
+        if tapper:
+            tg_clients = await get_tg_clients()
+            proxies = get_proxies()
+            await tapper.run_tapper_no_thread(tg_clients=tg_clients, proxies=proxies)
 
 
-        await run_tasks(tg_clients=tg_clients)
 
 
 async def run_tasks(tg_clients: list[Client]):
@@ -137,4 +163,4 @@ async def run_tasks(tg_clients: list[Client]):
     ]
 
     await asyncio.gather(*tasks)
-
+    
