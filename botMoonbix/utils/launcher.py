@@ -1,12 +1,10 @@
 import os
 import glob
-import asyncio
 import argparse
 import sys
 from pathlib import Path
 
 import requests
-from itertools import cycle
 
 from pyrogram import Client
 from better_proxy import Proxy
@@ -14,11 +12,12 @@ from better_proxy import Proxy
 from botMoonbix.config import settings
 from botMoonbix.utils import logger
 from botMoonbix.core.tapper import run_tapper_no_thread
+from botMoonbix.core.query import run_tapper_no_thread_query
 from botMoonbix.core.registrator import register_sessions
 
 import importlib.util
 
-curr_version = "3.0.0"
+curr_version = "3.0.5"
 
 version = requests.get("https://raw.githubusercontent.com/vanhbakaa/moonbix-bot/refs/heads/main/version")
 version_ = version.text.strip()
@@ -33,9 +32,10 @@ Version: {curr_version}
 By: https://github.com/vanhbakaa                                                                                                                                                                                         
 Select an action:
 
-    1. Run clicker
+    1. Run clicker (session)
     2. Create session
     3. Run Cheat Tapper
+    4. Run clicker (Query)
 """
 
 global tg_clients
@@ -144,22 +144,10 @@ async def process() -> None:
             tg_clients = await get_tg_clients(username)
             proxies = get_proxies()
             await tapper.run_tapper_no_thread(tg_clients=tg_clients, proxies=proxies)
+    elif action == 4:
+        with open("data.txt", "r") as f:
+            query_ids = [line.strip() for line in f.readlines()]
+        proxies = get_proxies()
+        await run_tapper_no_thread_query(query_ids, proxies)
 
-
-
-
-async def run_tasks(tg_clients: list[Client]):
-    proxies = get_proxies()
-    proxies_cycle = cycle(proxies) if proxies else None
-    tasks = [
-        asyncio.create_task(
-            run_tapper(
-                tg_client=tg_client,
-                proxy=next(proxies_cycle) if proxies_cycle else None,
-            )
-        )
-        for tg_client in tg_clients
-    ]
-
-    await asyncio.gather(*tasks)
 

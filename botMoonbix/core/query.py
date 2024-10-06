@@ -45,9 +45,9 @@ def base64_encode(data):
 
 
 class Tapper:
-    def __init__(self, tg_client: Client):
-        self.tg_client = tg_client
-        self.session_name = tg_client.name
+    def __init__(self, query: str, accname: str):
+        self.query = query
+        self.session_name = accname
         self.first_name = ''
         self.last_name = ''
         self.user_id = ''
@@ -61,73 +61,6 @@ class Tapper:
         self.game = None
         self.rs = 1000
         self.curr_time = None
-
-    async def get_tg_web_data(self, proxy: str | None) -> str:
-        ref_param = settings.REF_LINK.split("=")[1].split('&')[0]
-        if proxy:
-            proxy = Proxy.from_str(proxy)
-            proxy_dict = dict(
-                scheme=proxy.protocol,
-                hostname=proxy.host,
-                port=proxy.port,
-                username=proxy.login,
-                password=proxy.password
-            )
-        else:
-            proxy_dict = None
-
-        self.tg_client.proxy = proxy_dict
-
-        try:
-            if not self.tg_client.is_connected:
-                try:
-                    await self.tg_client.connect()
-                except (Unauthorized, UserDeactivated, AuthKeyUnregistered):
-                    raise InvalidSession(self.session_name)
-
-            while True:
-                try:
-                    peer = await self.tg_client.resolve_peer('Binance_Moonbix_bot')
-                    break
-                except FloodWait as fl:
-                    fls = fl.value
-
-                    logger.warning(f"<light-yellow>{self.session_name}</light-yellow> | FloodWait {fl}")
-                    logger.info(f"<light-yellow>{self.session_name}</light-yellow> | Sleep {fls}s")
-
-                    await asyncio.sleep(fls + 3)
-
-            web_view = await self.tg_client.invoke(RequestAppWebView(
-                peer=peer,
-                app=InputBotAppShortName(bot_id=peer, short_name="start"),
-                platform='android',
-                write_allowed=True,
-                start_param=ref_param
-            ))
-
-            auth_url = web_view.url
-            # print(auth_url)
-            tg_web_data1 = unquote(string=auth_url.split('tgWebAppData=')[1].split('&tgWebAppVersion')[0])
-            tg_web_data = unquote(
-                string=unquote(string=auth_url.split('tgWebAppData=')[1].split('&tgWebAppVersion')[0]))
-
-            self.user_id = tg_web_data.split('"id":')[1].split(',"first_name"')[0]
-            self.first_name = tg_web_data.split('"first_name":"')[1].split('","last_name"')[0]
-            self.last_name = tg_web_data.split('"last_name":"')[1].split('","username"')[0]
-
-            if self.tg_client.is_connected:
-                await self.tg_client.disconnect()
-
-            return tg_web_data1
-
-        except InvalidSession as error:
-            raise error
-
-        except Exception as error:
-            traceback.print_exc()
-            logger.error(f"<light-yellow>{self.session_name}</light-yellow> | Unknown error during Authorization: "
-                         f"{error}")
-            await asyncio.sleep(delay=3)
 
     def random_fingerprint(self, lengths=32):
         return ''.join(choices('0123456789abcdef', k=lengths))
@@ -814,14 +747,18 @@ class Tapper:
                 await asyncio.sleep(delay=randint(60, 120))
 
 
-async def run_tapper_no_thread(tg_clients, proxies):
+async def run_tapper_no_thread_query(queryids, proxies):
     proxies_cycle = cycle(proxies) if proxies else None
+    acc = "Account"
     while True:
-        for tg_client in tg_clients:
+        i = 0
+        for query in queryids:
+
             try:
-                await Tapper(tg_client=tg_client).run(next(proxies_cycle) if proxies_cycle else None)
+                await Tapper(query=query, accname=f"{acc}-{i}").run(next(proxies_cycle) if proxies_cycle else None)
+                i += 1
             except InvalidSession:
-                logger.error(f"{tg_client.name} | Invalid Session")
+                logger.error(f"{query} | Invalid Session")
 
             sleep_ = randint(settings.DELAY_EACH_ACCOUNT[0], settings.DELAY_EACH_ACCOUNT[1])
             logger.info(f"Sleep {sleep_}s...")
