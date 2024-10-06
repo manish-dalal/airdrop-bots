@@ -84,7 +84,7 @@ const clicker = async () => {
           console.log('mainMoonbix 4 end res===', res);
         }
         if (!process.env.DISABLE_MEMEFI) {
-          var res = await runPythonScript('mainMemeFi.py', user, 60000, '1');
+          var res = await runPythonScript('mainMemeFi.py', user, 120000, '1');
           console.log('mainMemeFi 5 end res===', res);
         }
       }
@@ -122,7 +122,7 @@ const startBot = async () => {
             console.log('mainMoonbix 4 end res===', res);
           }
           if (!process.env.DISABLE_MEMEFI) {
-            var res = await runPythonScript('mainMemeFi.py', user, 60000, '1');
+            var res = await runPythonScript('mainMemeFi.py', user, 120000, '1');
             console.log('mainMemeFi 5 end res===', res);
           }
         }
