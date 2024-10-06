@@ -675,7 +675,7 @@ class Tapper:
                         # print(solve1)
 
                         # print(payload)
-                        from bot.core.solver.captcha_solver import solve_captcha
+                        from botMoonbix.core.solver.captcha_solver import solve_captcha
 
                         solve = await solve_captcha(bizId, captcha_data)
                         # print(solve)
