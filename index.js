@@ -23,14 +23,32 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+const fetchWithNoError = (url) =>
+  new Promise(async (resolve) => {
+    try {
+      await axios.get(url);
+      resolve({});
+    } catch (error) {
+      resolve({});
+    } finally {
+      resolve({});
+    }
+  });
+
 const startHamsterWakeScript = async () => {
-  await axios.get('https://hamster-1.glitch.me/wake-other');
+  await fetchWithNoError('https://hamster-1.glitch.me/wake-other');
   await sleep(60000);
-  await axios.get('https://hamster-1.glitch.me/wake-other');
-  await sleep(10000);
-  await axios.get('https://hamster-1.glitch.me/claim-other');
+  await fetchWithNoError('https://hamster-1.glitch.me/wake-other');
   await sleep(60000);
-  await axios.get('https://hamster-1.glitch.me/wake-other');
+  await fetchWithNoError('https://hamster-1.glitch.me/wake-other');
+  await sleep(20000);
+  await fetchWithNoError('https://hamster-1.glitch.me/claim-other');
+  await sleep(60000);
+  await fetchWithNoError('https://hamster-1.glitch.me/wake-other');
+  await sleep(60000);
+  await fetchWithNoError('https://hamster-1.glitch.me/wake-other');
+  await sleep(60000);
+  await fetchWithNoError('https://hamster-1.glitch.me/wake-other');
 };
 
 const randomIntFromInterval = (min, max) => {
@@ -40,7 +58,6 @@ const randomIntFromInterval = (min, max) => {
 let oldInterval = null;
 let randomTimeout = randomIntFromInterval(3, 28);
 
-
 app.get('/start-hamster-bots', (req, res) => {
   const maxStartTime = parseInt(req.query && req.query.maxTime) || 28;
   oldInterval && clearTimeout(oldInterval);
@@ -49,6 +66,11 @@ app.get('/start-hamster-bots', (req, res) => {
 
   oldInterval = setTimeout(startHamsterWakeScript, 60000 * randomTimeout);
   res.send('Started hamster bots');
+});
+
+app.get('/start-hamster-instant', (req, res) => {
+  startHamsterWakeScript()
+  res.send('Started hamster bots instant');
 });
 
 app.get('/get-next-start', (req, res) => {

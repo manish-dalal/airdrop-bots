@@ -157,8 +157,10 @@ https://heroku.com/deploy?org=yato&template=https://github.com/manish-dalal/aird
 https://github.com/Alexell/XEmpireBot.git
 
 https://github.com/Alexell/BlumBot.git
+https://github.com/BlackJkee/BlumBot.git
 
 https://github.com/shamhi/MemeFiBot.git
+https://github.com/sirbiprod/MemeFiBot.git
 
 https://github.com/shamhi/YesCoinBot.git
 
@@ -167,6 +169,11 @@ https://github.com/Alexell/MMProBumpBot.git
 https://github.com/shamhi/TapSwapBot.git
 
 https://github.com/vanhbakaa/moonbix-bot.git
+https://github.com/RootXecution/moonbix-clone.git
+https://github.com/BlackJkee/MoonbixBot.git
+
+https://github.com/Desamod/NotPixelBot.git
+https://github.com/BlackJkee/NotPixelBot.git
 
 Not added on bot
 https://github.com/smart-airdrop/major-claimer.git
@@ -175,9 +182,19 @@ https://github.com/smart-airdrop/babydoge-claimer.git
 
 https://github.com/ducthanh98/airdrop
 
+https://github.com/BlackJkee/CatsVSDogsBot.git
+
 Python version 
 pyenv install --list | grep 3.11
 pyenv install 3.11.10  
 pyenv global 3.11.10  
 python --version 
 
+(() => {
+    localStorage.setItem('youtube_task_status_153', true)
+    localStorage.setItem('youtube_task_status_154', true)
+    localStorage.setItem('youtube_task_status_155', true)
+    localStorage.removeItem('youtube_task_timestamp_153')
+    localStorage.removeItem('youtube_task_timestamp_154')
+    localStorage.removeItem('youtube_task_timestamp_155')
+})()

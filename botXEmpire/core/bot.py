@@ -22,7 +22,7 @@ class CryptoBot:
 		self.bot_peer = None
 		self.bot_username = 'empirebot'
 		self.user_id = None
-		self.api_url = 'https://api.xempire.io'
+		self.api_url = 'https://api2.xempire.io'
 		self.taps_limit = False
 		self.taps_limit_date = ''
 		self.errors = 0
@@ -138,7 +138,7 @@ class CryptoBot:
 	async def get_profile(self, full: bool) -> dict:
 		full_url = self.api_url + '/user/data/all'
 		after_url = self.api_url + '/user/data/after'
-		sync_url = self.api_url + '/hero/balance/sync'
+		sync_url = 'https://api2.xempire.io/hero/balance/sync'
 		try:
 			if full:
 				json_data = {'data': {}}

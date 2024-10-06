@@ -18,7 +18,7 @@ from botMoonbix.core.registrator import register_sessions
 
 import importlib.util
 
-curr_version = "2.5.5"
+curr_version = "3.0.0"
 
 version = requests.get("https://raw.githubusercontent.com/vanhbakaa/moonbix-bot/refs/heads/main/version")
 version_ = version.text.strip()
@@ -33,9 +33,9 @@ Version: {curr_version}
 By: https://github.com/vanhbakaa                                                                                                                                                                                         
 Select an action:
 
-    1. Create session
-    2. Run clicker 
-    3. Run clicker with multi-thread (Need proxy) | Just work with one account if you dont have proxy !
+    1. Run clicker
+    2. Create session
+    3. Run Cheat Tapper
 """
 
 global tg_clients
@@ -125,24 +125,23 @@ async def process() -> None:
 
             if not action.isdigit():
                 logger.warning("Action must be number")
-            elif action not in ["1", "2", "3"]:
-                logger.warning("Action must be 1, 2, or 3")
+            elif action not in ["1", "2", "3", "4"]:
+                logger.warning("Action must be 1, 2, 3 or 4")
             else:
                 action = int(action)
                 break
 
-    if action == 1:
+    if action == 2:
         await register_sessions()
-    elif action == 2:
+    elif action == 1:
         tg_clients = await get_tg_clients(username)
         proxies = get_proxies()
         await run_tapper_no_thread(tg_clients=tg_clients, proxies=proxies)
 
-
     elif action == 3:
         tapper = import_tapper()
         if tapper:
-            tg_clients = await get_tg_clients()
+            tg_clients = await get_tg_clients(username)
             proxies = get_proxies()
             await tapper.run_tapper_no_thread(tg_clients=tg_clients, proxies=proxies)
 
@@ -163,4 +162,4 @@ async def run_tasks(tg_clients: list[Client]):
     ]
 
     await asyncio.gather(*tasks)
-    
+

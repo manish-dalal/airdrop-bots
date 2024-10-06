@@ -116,4 +116,3 @@ coverage/
 .nyc_output/
 .history
 account.py
-sessions-test

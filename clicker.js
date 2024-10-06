@@ -26,10 +26,10 @@ const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const runPythonScript = (filename, user = '', timeout = 240000) => {
+const runPythonScript = (filename, user = '', timeout = 480000, action = '2') => {
   return new Promise(async (resolve, reject) => {
     try {
-      const arguments = user ? [filename, '-a', '2', '-u', user] : [filename, '-a', '2'];
+      const arguments = user ? [filename, '-a', action, '-u', user] : [filename, '-a', action];
       const python = spawn('python', arguments);
       const timeoutRf = setTimeout(() => {
         python.kill();
@@ -75,26 +75,26 @@ const clicker = async () => {
     isBotRuning = true;
     try {
       for (const user of users) {
-        if (!process.env.DISABLE_BLUM) {
-          var res = await runPythonScript('mainBlum.py', user, 100000);
-          console.log('mainBlum 1 end res===', res);
-        }
         if (!process.env.DISABLE_MMPRO) {
           var res = await runPythonScript('mainMMProBump.py', user, 60000);
           console.log('mainMMProBump 2 end res===', res);
         }
-        if (!process.env.DISABLE_X_EMPIRE) {
-          var res = await runPythonScript('mainXEmpire.py', user, 120000);
-          console.log('mainXEmpire 3 end res===', res);
-        }
         if (!process.env.DISABLE_MOON_BIX) {
-          var res = await runPythonScript('mainMoonbix.py', user, 360000);
+          var res = await runPythonScript('mainMoonbix.py', user, 360000, '1');
           console.log('mainMoonbix 4 end res===', res);
         }
+        if (!process.env.DISABLE_MEMEFI) {
+          var res = await runPythonScript('mainMemeFi.py', user, 240000, '1');
+          console.log('mainMemeFi 5 end res===', res);
+        }
       }
-      if (!process.env.DISABLE_MEMEFI) {
-        var res = await runPythonScript('mainMemeFi.py');
-        console.log('mainMemeFi 5 end res===', res);
+      if (!process.env.DISABLE_BLUM) {
+        var res = await runPythonScript('mainBlum.py', '', 480000, '1');
+        console.log('mainBlum end res===', res);
+      }
+      if (!process.env.DISABLE_NOT_PIXEL) {
+        var res = await runPythonScript('mainNotPixel.py', '', 480000, '1');
+        console.log('mainNotPixel end res===', res);
       }
       if (!process.env.DISABLE_YESCOIN) {
         var res = await runPythonScript('mainYesCoin.py');
@@ -113,26 +113,26 @@ const startBot = async () => {
       isBotRuning = true;
       try {
         for (const user of users) {
-          if (!process.env.DISABLE_BLUM) {
-            var res = await runPythonScript('mainBlum.py', user, 100000);
-            console.log('mainBlum 1 end res===', res);
-          }
           if (!process.env.DISABLE_MMPRO) {
             var res = await runPythonScript('mainMMProBump.py', user, 60000);
             console.log('mainMMProBump 2 end res===', res);
           }
-          if (!process.env.DISABLE_X_EMPIRE) {
-            var res = await runPythonScript('mainXEmpire.py', user, 120000);
-            console.log('mainXEmpire 3 end res===', res);
-          }
           if (!process.env.DISABLE_MOON_BIX) {
-            var res = await runPythonScript('mainMoonbix.py', user, 360000);
+            var res = await runPythonScript('mainMoonbix.py', user, 360000, '1');
             console.log('mainMoonbix 4 end res===', res);
           }
+          if (!process.env.DISABLE_MEMEFI) {
+            var res = await runPythonScript('mainMemeFi.py', user, 240000, '1');
+            console.log('mainMemeFi 5 end res===', res);
+          }
         }
-        if (!process.env.DISABLE_MEMEFI) {
-          var res = await runPythonScript('mainMemeFi.py');
-          console.log('mainMemeFi 5 end res===', res);
+        if (!process.env.DISABLE_BLUM) {
+          var res = await runPythonScript('mainBlum.py', '', 480000, '1');
+          console.log('mainBlum end res===', res);
+        }
+        if (!process.env.DISABLE_NOT_PIXEL) {
+          var res = await runPythonScript('mainNotPixel.py', '', 540000, '1');
+          console.log('mainNotPixel end res===', res);
         }
         if (!process.env.DISABLE_YESCOIN) {
           var res = await runPythonScript('mainYesCoin.py');

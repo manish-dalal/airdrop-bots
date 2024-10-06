@@ -5,6 +5,10 @@ import argparse
 from itertools import cycle
 from pathlib import Path
 
+import platform
+import sys
+#import distro
+
 from pyrogram import Client
 from better_proxy import Proxy
 
@@ -15,15 +19,18 @@ from botMemeFi.core.registrator import register_sessions
 
 
 start_text = """
-
-░█▀▄▀█ █▀▀ █▀▄▀█ █▀▀ ░█▀▀▀  ▀  ░█▀▀█ █▀▀█ ▀▀█▀▀ 
-░█░█░█ █▀▀ █ ▀ █ █▀▀ ░█▀▀▀ ▀█▀ ░█▀▀▄ █  █   █ 
-░█  ░█ ▀▀▀ ▀   ▀ ▀▀▀ ░█    ▀▀▀ ░█▄▄█ ▀▀▀▀   ▀
-
+                               
+███╗   ███╗███████╗███╗   ███╗███████╗███████╗██╗██████╗  ██████╗ ████████╗
+████╗ ████║██╔════╝████╗ ████║██╔════╝██╔════╝██║██╔══██╗██╔═══██╗╚══██╔══╝
+██╔████╔██║█████╗  ██╔████╔██║█████╗  █████╗  ██║██████╔╝██║   ██║   ██║   
+██║╚██╔╝██║██╔══╝  ██║╚██╔╝██║██╔══╝  ██╔══╝  ██║██╔══██╗██║   ██║   ██║   
+██║ ╚═╝ ██║███████╗██║ ╚═╝ ██║███████╗██║     ██║██████╔╝╚██████╔╝   ██║   
+╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝╚═════╝  ╚═════╝    ╚═╝   
+                                                                           
 Select an action:
 
-    1. Create session
-    2. Run clicker
+    1. Run bot
+    2. Create session
 """
 
 
@@ -66,6 +73,25 @@ async def get_tg_clients(username) -> list[Client]:
 
 
 async def process() -> None:
+
+    # Версия Python
+    python_version = sys.version
+
+    # Версия системы
+    system = platform.system()
+    release = platform.release()
+
+    if system == "Windows":
+        logger.debug(f"⚡️ Версия Python: {python_version}")
+        logger.debug(f"⚡️ Операционная система: {system} {release}")
+    elif system == "Linux":
+        #distro_info = distro.linux_distribution()
+        logger.debug(f"⚡️ Версия Python: {python_version}")
+        logger.debug(f"⚡️ Операционная система: {system} {release}")
+        #logger.debug(f"⚡️ Дистрибутив Linux: {distro_info[0]} {distro_info[1]}")
+    else:
+        logger.debug(f"⚡️ Версия Python: {python_version}")
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--action', type=int, help='Action to perform')
 
@@ -91,11 +117,11 @@ async def process() -> None:
                 break
 
     if action == 1:
-        await register_sessions()
-    elif action == 2:
         tg_clients = await get_tg_clients(username)
-
         await run_tasks(tg_clients=tg_clients)
+    elif action == 2:
+        await register_sessions()
+
 
 
 async def run_tasks(tg_clients: list[Client]):
