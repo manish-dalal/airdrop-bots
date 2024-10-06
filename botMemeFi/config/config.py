@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     EMERGENCY_STOP: bool = False
 
-    ROLL_CASINO: bool = True
+    ROLL_CASINO: bool = False
     VALUE_SPIN: int = 1
     LOTTERY_INFO: bool = True
 
