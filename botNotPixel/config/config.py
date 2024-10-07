@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     OWN_COLOR: str = "#FFFFFF"
     NIGHT_SLEEP: bool = True
     NIGHT_SLEEP_START_TIME: list[int] = [0, 2]
-    NIGHT_SLEEP_END_TIME: list[int] = [5, 7]
+    NIGHT_SLEEP_END_TIME: list[int] = [4, 6]
     REF_ID: str = 'f2069381513'
 
 
