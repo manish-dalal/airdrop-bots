@@ -76,15 +76,15 @@ const clicker = async () => {
     try {
       for (const user of users) {
         if (!process.env.DISABLE_MMPRO) {
-          var res = await runPythonScript('mainMMProBump.py', user, 60000);
+          var res = await runPythonScript('mainMMProBump.py', user, 64000);
           console.log('mainMMProBump 2 end res===', res);
         }
         if (!process.env.DISABLE_MOON_BIX) {
-          var res = await runPythonScript('mainMoonbix.py', user, 360000, '1');
+          var res = await runPythonScript('mainMoonbix.py', user, 362000, '1');
           console.log('mainMoonbix 4 end res===', res);
         }
         if (!process.env.DISABLE_MEMEFI) {
-          var res = await runPythonScript('mainMemeFi.py', user, 30000, '1');
+          var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
           console.log('mainMemeFi 5 end res===', res);
         }
       }
@@ -114,15 +114,15 @@ const startBot = async () => {
       try {
         for (const user of users) {
           if (!process.env.DISABLE_MMPRO) {
-            var res = await runPythonScript('mainMMProBump.py', user, 60000);
+            var res = await runPythonScript('mainMMProBump.py', user, 64000);
             console.log('mainMMProBump 2 end res===', res);
           }
           if (!process.env.DISABLE_MOON_BIX) {
-            var res = await runPythonScript('mainMoonbix.py', user, 360000, '1');
+            var res = await runPythonScript('mainMoonbix.py', user, 362000, '1');
             console.log('mainMoonbix 4 end res===', res);
           }
           if (!process.env.DISABLE_MEMEFI) {
-            var res = await runPythonScript('mainMemeFi.py', user, 30000, '1');
+            var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
             console.log('mainMemeFi 5 end res===', res);
           }
         }
