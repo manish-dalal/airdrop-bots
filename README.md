@@ -191,10 +191,11 @@ pyenv global 3.11.10
 python --version 
 
 (() => {
-    localStorage.setItem('youtube_task_status_153', true)
-    localStorage.setItem('youtube_task_status_154', true)
-    localStorage.setItem('youtube_task_status_155', true)
-    localStorage.removeItem('youtube_task_timestamp_153')
-    localStorage.removeItem('youtube_task_timestamp_154')
-    localStorage.removeItem('youtube_task_timestamp_155')
+    localStorage.setItem('youtube_task_status_162', true)
+    localStorage.setItem('youtube_task_status_163', true)
+    localStorage.removeItem('youtube_task_timestamp_162')
+    localStorage.removeItem('youtube_task_timestamp_163')
 })()
+
+MEME_FI_ONLY
+WATCH_VIDEO

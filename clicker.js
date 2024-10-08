@@ -2,6 +2,7 @@ const { spawn } = require('child_process');
 const envFile = '.env';
 require('dotenv').config({ path: envFile });
 
+const startMemeFiVideoOnly = process.env.MEME_FI_ONLY || false
 const users = process.env.USER_NAMES
   ? process.env.USER_NAMES.split(',')
   : [
@@ -75,31 +76,37 @@ const clicker = async () => {
     isBotRuning = true;
     try {
       for (const user of users) {
-        if (!process.env.DISABLE_MMPRO) {
+        if (!process.env.DISABLE_MMPRO && !startMemeFiVideoOnly) {
           var res = await runPythonScript('mainMMProBump.py', user, 64000);
           console.log('mainMMProBump 2 end res===', res);
         }
-        if (!process.env.DISABLE_MOON_BIX) {
+        if (!process.env.DISABLE_MOON_BIX && !startMemeFiVideoOnly) {
           var res = await runPythonScript('mainMoonbix.py', user, 362000, '1');
           console.log('mainMoonbix 4 end res===', res);
         }
-        if (!process.env.DISABLE_MEMEFI) {
+        if (!process.env.DISABLE_MEMEFI && !startMemeFiVideoOnly) {
           var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
           console.log('mainMemeFi 5 end res===', res);
         }
+        if (startMemeFiVideoOnly && !startMemeFiVideoOnly) {
+          var res = await runPythonScript('mainMemeFi.py', user, 30000, '1');
+          console.log('mainMemeFi 5 end res===', res);
+        }
       }
-      if (!process.env.DISABLE_BLUM) {
+      if (!process.env.DISABLE_BLUM && !startMemeFiVideoOnly) {
         var res = await runPythonScript('mainBlum.py', '', 480000, '1');
         console.log('mainBlum end res===', res);
       }
-      if (!process.env.DISABLE_NOT_PIXEL) {
-        var res = await runPythonScript('mainNotPixel.py', '', 480000, '1');
+      if (!process.env.DISABLE_NOT_PIXEL && !startMemeFiVideoOnly) {
+        var res = await runPythonScript('mainNotPixel.py', '', 540000, '1');
         console.log('mainNotPixel end res===', res);
       }
-      if (!process.env.DISABLE_YESCOIN) {
+      if (!process.env.DISABLE_YESCOIN && !startMemeFiVideoOnly) {
         var res = await runPythonScript('mainYesCoin.py');
         console.log('mainYesCoin 6 end res===', res);
       }
+    } catch {
+      isBotRuning = false;
     } finally {
       isBotRuning = false;
     }
@@ -113,31 +120,37 @@ const startBot = async () => {
       isBotRuning = true;
       try {
         for (const user of users) {
-          if (!process.env.DISABLE_MMPRO) {
+          if (!process.env.DISABLE_MMPRO && !startMemeFiVideoOnly) {
             var res = await runPythonScript('mainMMProBump.py', user, 64000);
             console.log('mainMMProBump 2 end res===', res);
           }
-          if (!process.env.DISABLE_MOON_BIX) {
+          if (!process.env.DISABLE_MOON_BIX && !startMemeFiVideoOnly) {
             var res = await runPythonScript('mainMoonbix.py', user, 362000, '1');
             console.log('mainMoonbix 4 end res===', res);
           }
-          if (!process.env.DISABLE_MEMEFI) {
+          if (!process.env.DISABLE_MEMEFI && !startMemeFiVideoOnly) {
             var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
             console.log('mainMemeFi 5 end res===', res);
           }
+          if (startMemeFiVideoOnly && !startMemeFiVideoOnly) {
+            var res = await runPythonScript('mainMemeFi.py', user, 30000, '1');
+            console.log('mainMemeFi 5 end res===', res);
+          }
         }
-        if (!process.env.DISABLE_BLUM) {
+        if (!process.env.DISABLE_BLUM && !startMemeFiVideoOnly) {
           var res = await runPythonScript('mainBlum.py', '', 480000, '1');
           console.log('mainBlum end res===', res);
         }
-        if (!process.env.DISABLE_NOT_PIXEL) {
+        if (!process.env.DISABLE_NOT_PIXEL && !startMemeFiVideoOnly) {
           var res = await runPythonScript('mainNotPixel.py', '', 540000, '1');
           console.log('mainNotPixel end res===', res);
         }
-        if (!process.env.DISABLE_YESCOIN) {
+        if (!process.env.DISABLE_YESCOIN && !startMemeFiVideoOnly) {
           var res = await runPythonScript('mainYesCoin.py');
           console.log('mainYesCoin 6 end res===', res);
         }
+      } catch {
+        isBotRuning = false;
       } finally {
         isBotRuning = false;
       }
