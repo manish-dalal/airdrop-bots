@@ -88,8 +88,8 @@ const clicker = async () => {
           var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
           console.log('mainMemeFi 5 end res===', res);
         }
-        if (startMemeFiVideoOnly && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainMemeFi.py', user, 30000, '1');
+        if (startMemeFiVideoOnly) {
+          var res = await runPythonScript('mainMemeFi.py', user, 60000, '1');
           console.log('mainMemeFi 5 end res===', res);
         }
       }
@@ -132,8 +132,8 @@ const startBot = async () => {
             var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
             console.log('mainMemeFi 5 end res===', res);
           }
-          if (startMemeFiVideoOnly && !startMemeFiVideoOnly) {
-            var res = await runPythonScript('mainMemeFi.py', user, 30000, '1');
+          if (startMemeFiVideoOnly) {
+            var res = await runPythonScript('mainMemeFi.py', user, 60000, '1');
             console.log('mainMemeFi 5 end res===', res);
           }
         }
