@@ -1,9 +1,10 @@
+const botConfig = require('./botConfig.json');
 const { spawn } = require('child_process');
 const envFile = '.env';
 require('dotenv').config({ path: envFile });
-import botConfig from './botConfig.json';
 
-const botJsConfig = JSON.parse(process.env.BOT_CONFIG || '') || botConfig;
+const stringifyConfig = process.env.BOT_CONFIG || '';
+const botJsConfig = stringifyConfig ? JSON.parse(stringifyConfig) : botConfig;
 
 const users = process.env.USER_NAMES
   ? process.env.USER_NAMES.split(',')
