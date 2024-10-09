@@ -316,6 +316,7 @@ class Tapper:
                 'Doxxing? What\'s that?': 'NODOXXING',
                 'Pre-Market Trading?': 'WOWBLUM',
                 'How to Memecoin?': 'MEMEBLUM',
+                'Token Burning : How & Why?': 'ONFIRE',
                 'Play track & type track name': 'Blum - Big City Life'
 
             }
