@@ -1,8 +1,10 @@
 const { spawn } = require('child_process');
 const envFile = '.env';
 require('dotenv').config({ path: envFile });
+import botConfig from './botConfig.json';
 
-const startMemeFiVideoOnly = process.env.MEME_FI_ONLY || false
+const botJsConfig = JSON.parse(process.env.BOT_CONFIG || '') || botConfig;
+
 const users = process.env.USER_NAMES
   ? process.env.USER_NAMES.split(',')
   : [
@@ -76,33 +78,29 @@ const clicker = async () => {
     isBotRuning = true;
     try {
       for (const user of users) {
-        if (!process.env.DISABLE_MMPRO && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainMMProBump.py', user, 64000);
+        if (botJsConfig['MMPRO']) {
+          var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
           console.log('mainMMProBump 2 end res===', res);
         }
-        if (!process.env.DISABLE_MOON_BIX && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainMoonbix.py', user, 362000, '1');
+        if (botJsConfig['MOON_BIX']) {
+          var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
           console.log('mainMoonbix 4 end res===', res);
         }
-        if (!process.env.DISABLE_MEMEFI && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
-          console.log('mainMemeFi 5 end res===', res);
-        }
-        if (startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainMemeFi.py', user, 60000, '1');
+        if (botJsConfig['MEMEFI']) {
+          var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
           console.log('mainMemeFi 5 end res===', res);
         }
       }
-      if (!process.env.DISABLE_BLUM && !startMemeFiVideoOnly) {
-        var res = await runPythonScript('mainBlum.py', '', 480000, '1');
+      if (botJsConfig['BLUM']) {
+        var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
         console.log('mainBlum end res===', res);
       }
-      if (!process.env.DISABLE_NOT_PIXEL && !startMemeFiVideoOnly) {
-        var res = await runPythonScript('mainNotPixel.py', '', 540000, '1');
+      if (botJsConfig['NOT_PIXEL']) {
+        var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
         console.log('mainNotPixel end res===', res);
       }
-      if (!process.env.DISABLE_YESCOIN && !startMemeFiVideoOnly) {
-        var res = await runPythonScript('mainYesCoin.py');
+      if (botJsConfig['YESCOIN']) {
+        var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
         console.log('mainYesCoin 6 end res===', res);
       }
     } catch {
@@ -120,33 +118,29 @@ const startBot = async () => {
       isBotRuning = true;
       try {
         for (const user of users) {
-          if (!process.env.DISABLE_MMPRO && !startMemeFiVideoOnly) {
-            var res = await runPythonScript('mainMMProBump.py', user, 64000);
+          if (botJsConfig['MMPRO']) {
+            var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
             console.log('mainMMProBump 2 end res===', res);
           }
-          if (!process.env.DISABLE_MOON_BIX && !startMemeFiVideoOnly) {
-            var res = await runPythonScript('mainMoonbix.py', user, 362000, '1');
+          if (botJsConfig['MOON_BIX']) {
+            var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
             console.log('mainMoonbix 4 end res===', res);
           }
-          if (!process.env.DISABLE_MEMEFI && !startMemeFiVideoOnly) {
-            var res = await runPythonScript('mainMemeFi.py', user, 103000, '1');
-            console.log('mainMemeFi 5 end res===', res);
-          }
-          if (startMemeFiVideoOnly) {
-            var res = await runPythonScript('mainMemeFi.py', user, 60000, '1');
+          if (botJsConfig['MEMEFI']) {
+            var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
             console.log('mainMemeFi 5 end res===', res);
           }
         }
-        if (!process.env.DISABLE_BLUM && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainBlum.py', '', 480000, '1');
+        if (botJsConfig['BLUM']) {
+          var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
           console.log('mainBlum end res===', res);
         }
-        if (!process.env.DISABLE_NOT_PIXEL && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainNotPixel.py', '', 540000, '1');
+        if (botJsConfig['NOT_PIXEL']) {
+          var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
           console.log('mainNotPixel end res===', res);
         }
-        if (!process.env.DISABLE_YESCOIN && !startMemeFiVideoOnly) {
-          var res = await runPythonScript('mainYesCoin.py');
+        if (botJsConfig['YESCOIN']) {
+          var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
           console.log('mainYesCoin 6 end res===', res);
         }
       } catch {

@@ -197,5 +197,10 @@ python --version
     localStorage.removeItem('youtube_task_timestamp_163')
 })()
 
-MEME_FI_ONLY
-WATCH_VIDEO
+(() => {
+    for (let i = 150; i < 5000; i++) {
+        localStorage.setItem(`youtube_task_status_${i}`, true)
+        localStorage.removeItem(`youtube_task_timestamp_${i}`)
+    }
+})()
+

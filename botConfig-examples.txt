@@ -1,0 +1,16 @@
+Default
+BOT_CONFIG = {
+    "MMPRO": 64000,
+    "MOON_BIX": 362000,
+    "MEMEFI": 103000,
+    "BLUM": 480000,
+    "NOT_PIXEL": 540000,
+    "YESCOIN": 480000
+}
+
+
+MEMEFI ONLY
+WATCH_VIDEO = true
+BOT_CONFIG ={
+    "MEMEFI": 60000
+}
