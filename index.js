@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const methods = require('./clicker');
 const axios = require('axios');
 
-const { clicker } = methods;
+const { clicker, getActiveUserBot } = methods;
 
 const app = express();
 app.set('port', process.env.PORT || 4000);
@@ -76,6 +76,13 @@ app.get('/start-hamster-instant', (req, res) => {
 app.get('/get-next-start', (req, res) => {
   res.send(`${randomTimeout}`);
 });
+
+
+app.get('/get-stats', (req, res) => {
+  const stats = getActiveUserBot()
+  res.send(`Active user =${stats.activeUser} \n\nActive Bot =${stats.runingBot}`);
+});
+
 
 app.listen(app.get('port'), () => {
   console.log(`Example app listening on port ${app.get('port')}`);

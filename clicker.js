@@ -26,6 +26,11 @@ const users = process.env.USER_NAMES
       'AI4',
     ];
 
+let activeUserBot = '';
+const getActiveUserBot = () => {
+  const [activeUser = '', runingBot = ''] = activeUserBot.split('====');
+  return { activeUser, runingBot };
+};
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -80,27 +85,33 @@ const clicker = async () => {
     try {
       for (const user of users) {
         if (botJsConfig['MMPRO']) {
+          activeUserBot = `${user}====${'MMPRO'}`;
           var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
           console.log('mainMMProBump 2 end res===', res);
         }
         if (botJsConfig['MOON_BIX']) {
+          activeUserBot = `${user}====${'MOON_BIX'}`;
           var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
           console.log('mainMoonbix 4 end res===', res);
         }
         if (botJsConfig['MEMEFI']) {
+          activeUserBot = `${user}====${'MEMEFI'}`;
           var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
           console.log('mainMemeFi 5 end res===', res);
         }
       }
       if (botJsConfig['BLUM']) {
+        activeUserBot = `${user}====${'BLUM'}`;
         var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
         console.log('mainBlum end res===', res);
       }
       if (botJsConfig['NOT_PIXEL']) {
+        activeUserBot = `${user}====${'NOT_PIXEL'}`;
         var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
         console.log('mainNotPixel end res===', res);
       }
       if (botJsConfig['YESCOIN']) {
+        activeUserBot = `${user}====${'YESCOIN'}`;
         var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
         console.log('mainYesCoin 6 end res===', res);
       }
@@ -120,27 +131,33 @@ const startBot = async () => {
       try {
         for (const user of users) {
           if (botJsConfig['MMPRO']) {
+            activeUserBot = `${user}====${'MMPRO'}`;
             var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
             console.log('mainMMProBump 2 end res===', res);
           }
           if (botJsConfig['MOON_BIX']) {
+            activeUserBot = `${user}====${'MOON_BIX'}`;
             var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
             console.log('mainMoonbix 4 end res===', res);
           }
           if (botJsConfig['MEMEFI']) {
+            activeUserBot = `${user}====${'MEMEFI'}`;
             var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
             console.log('mainMemeFi 5 end res===', res);
           }
         }
         if (botJsConfig['BLUM']) {
+          activeUserBot = `${user}====${'BLUM'}`;
           var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
           console.log('mainBlum end res===', res);
         }
         if (botJsConfig['NOT_PIXEL']) {
+          activeUserBot = `${user}====${'NOT_PIXEL'}`;
           var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
           console.log('mainNotPixel end res===', res);
         }
         if (botJsConfig['YESCOIN']) {
+          activeUserBot = `${user}====${'YESCOIN'}`;
           var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
           console.log('mainYesCoin 6 end res===', res);
         }
@@ -156,4 +173,4 @@ const startBot = async () => {
   console.log('stattaus===', isBotRuning);
 };
 startBot();
-module.exports = { clicker };
+module.exports = { clicker, getActiveUserBot };
