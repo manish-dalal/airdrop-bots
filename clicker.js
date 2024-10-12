@@ -101,17 +101,17 @@ const clicker = async () => {
         }
       }
       if (botJsConfig['BLUM']) {
-        activeUserBot = `${user}====${'BLUM'}`;
+        activeUserBot = `ALL====${'BLUM'}`;
         var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
         console.log('mainBlum end res===', res);
       }
       if (botJsConfig['NOT_PIXEL']) {
-        activeUserBot = `${user}====${'NOT_PIXEL'}`;
+        activeUserBot = `ALL====${'NOT_PIXEL'}`;
         var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
         console.log('mainNotPixel end res===', res);
       }
       if (botJsConfig['YESCOIN']) {
-        activeUserBot = `${user}====${'YESCOIN'}`;
+        activeUserBot = `ALL====${'YESCOIN'}`;
         var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
         console.log('mainYesCoin 6 end res===', res);
       }
@@ -147,17 +147,17 @@ const startBot = async () => {
           }
         }
         if (botJsConfig['BLUM']) {
-          activeUserBot = `${user}====${'BLUM'}`;
+          activeUserBot = `ALL====${'BLUM'}`;
           var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
           console.log('mainBlum end res===', res);
         }
         if (botJsConfig['NOT_PIXEL']) {
-          activeUserBot = `${user}====${'NOT_PIXEL'}`;
+          activeUserBot = `ALL====${'NOT_PIXEL'}`;
           var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
           console.log('mainNotPixel end res===', res);
         }
         if (botJsConfig['YESCOIN']) {
-          activeUserBot = `${user}====${'YESCOIN'}`;
+          activeUserBot = `ALL====${'YESCOIN'}`;
           var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
           console.log('mainYesCoin 6 end res===', res);
         }

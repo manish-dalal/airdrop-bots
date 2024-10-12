@@ -318,6 +318,7 @@ class Tapper:
                 'How to Memecoin?': 'MEMEBLUM',
                 'Token Burning: How & Why?': 'ONFIRE',
                 'Bitcoin Rainbow Chart?': 'SOBLUM',
+                'Crypto Terms. Part 1': 'BLUMEXPLORER',
                 'Play track & type track name': 'Blum - Big City Life'
 
             }
