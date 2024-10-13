@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     API_ID: int
     API_HASH: str
 
-    PLAY_GAMES: bool = True
+    PLAY_GAMES: bool = False
     POINTS: list[int] = [190, 230]
 
     USE_RANDOM_DELAY_IN_RUN: bool = True
