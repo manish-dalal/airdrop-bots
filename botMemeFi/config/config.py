@@ -15,12 +15,12 @@ class Settings(BaseSettings):
 
     AUTO_BUY_TAPBOT: bool = True
 
-    AUTO_UPGRADE_TAP: bool = False
-    MAX_TAP_LEVEL: int = 5
-    AUTO_UPGRADE_ENERGY: bool = False
-    MAX_ENERGY_LEVEL: int = 5
-    AUTO_UPGRADE_CHARGE: bool = False
-    MAX_CHARGE_LEVEL: int = 3
+    AUTO_UPGRADE_TAP: bool = True
+    MAX_TAP_LEVEL: int = 10
+    AUTO_UPGRADE_ENERGY: bool = True
+    MAX_ENERGY_LEVEL: int = 10
+    AUTO_UPGRADE_CHARGE: bool = True
+    MAX_CHARGE_LEVEL: int = 5
 
     APPLY_DAILY_ENERGY: bool = True
     APPLY_DAILY_TURBO: bool = True
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     EMERGENCY_STOP: bool = False
 
-    ROLL_CASINO: bool = False
+    ROLL_CASINO: bool = True
     VALUE_SPIN: int = 1
     LOTTERY_INFO: bool = True
 

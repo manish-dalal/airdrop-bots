@@ -175,6 +175,10 @@ https://github.com/BlackJkee/MoonbixBot.git
 https://github.com/Desamod/NotPixelBot.git
 https://github.com/BlackJkee/NotPixelBot.git
 
+https://github.com/vanhbakaa/PocketFi.git
+
+https://github.com/vanhbakaa/Coinsweeper.git
+
 Not added on bot
 https://github.com/smart-airdrop/major-claimer.git
 
