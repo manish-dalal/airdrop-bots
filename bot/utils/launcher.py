@@ -9,11 +9,11 @@ import requests
 from pyrogram import Client
 from better_proxy import Proxy
 
-from botMoonbix.config import settings
-from botMoonbix.utils import logger
-from botMoonbix.core.tapper import run_tapper_no_thread
-from botMoonbix.core.query import run_tapper_no_thread_query
-from botMoonbix.core.registrator import register_sessions
+from bot.config import settings
+from bot.utils import logger
+from bot.core.tapper import run_tapper_no_thread
+from bot.core.query import run_tapper_no_thread_query
+from bot.core.registrator import register_sessions
 
 import importlib.util
 

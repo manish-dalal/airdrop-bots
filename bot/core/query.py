@@ -20,13 +20,13 @@ from pyrogram.raw.types import InputBotAppShortName
 from pyrogram.raw.functions.messages import RequestAppWebView
 from soupsieve.util import lower
 
-from botMoonbix.core.agents import generate_random_user_agent
-from botMoonbix.config import settings
+from bot.core.agents import generate_random_user_agent
+from bot.config import settings
 import cloudscraper
 from math import sqrt
 
-from botMoonbix.utils import logger
-from botMoonbix.exceptions import InvalidSession
+from bot.utils import logger
+from bot.exceptions import InvalidSession
 from .headers import headers
 from random import randint, choices, choice, uniform
 import secrets
@@ -608,7 +608,7 @@ class Tapper:
                         # print(solve1)
 
                         # print(payload)
-                        from botMoonbix.core.solver.captcha_solver import solve_captcha
+                        from bot.core.solver.captcha_solver import solve_captcha
 
                         solve = await solve_captcha(bizId, captcha_data)
                         # print(solve)

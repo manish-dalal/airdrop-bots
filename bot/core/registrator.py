@@ -1,7 +1,7 @@
 from pyrogram import Client
 
-from botMoonbix.config import settings
-from botMoonbix.utils import logger
+from bot.config import settings
+from bot.utils import logger
 
 
 async def register_sessions() -> None:

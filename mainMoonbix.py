@@ -1,7 +1,7 @@
 import asyncio
 from contextlib import suppress
 
-from botMoonbix.utils.launcher import process
+from bot.utils.launcher import process
 
 
 async def main():
