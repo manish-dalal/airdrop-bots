@@ -100,16 +100,16 @@ const clicker = async () => {
           var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
           console.log('mainMemeFi 5 end res===', res);
         }
+        if (botJsConfig['COIN_SWEEPER']) {
+          activeUserBot = `${user}====${'COIN_SWEEPER'}`;
+          var res = await runPythonScript('mainCoinSweeper.py', user, botJsConfig['COIN_SWEEPER'], '1');
+          console.log('COIN_SWEEPER end res===', res);
+        }
       }
       if (botJsConfig['POCKET_FI']) {
         activeUserBot = `ALL====${'POCKET_FI'}`;
         var res = await runPythonScript('mainPocketFi.py', '', botJsConfig['POCKET_FI'], '1');
         console.log('POCKET_FI end res===', res);
-      }
-      if (botJsConfig['COIN_SWEEPER']) {
-        activeUserBot = `ALL====${'COIN_SWEEPER'}`;
-        var res = await runPythonScript('mainCoinSweeper.py', '', botJsConfig['COIN_SWEEPER'], '1');
-        console.log('COIN_SWEEPER end res===', res);
       }
       if (botJsConfig['BLUM']) {
         activeUserBot = `ALL====${'BLUM'}`;
@@ -156,16 +156,16 @@ const startBot = async () => {
             var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
             console.log('mainMemeFi 5 end res===', res);
           }
+          if (botJsConfig['COIN_SWEEPER']) {
+            activeUserBot = `${user}====${'COIN_SWEEPER'}`;
+            var res = await runPythonScript('mainCoinSweeper.py', user, botJsConfig['COIN_SWEEPER'], '1');
+            console.log('COIN_SWEEPER end res===', res);
+          }
         }
         if (botJsConfig['POCKET_FI']) {
           activeUserBot = `ALL====${'POCKET_FI'}`;
           var res = await runPythonScript('mainPocketFi.py', '', botJsConfig['POCKET_FI'], '1');
           console.log('POCKET_FI end res===', res);
-        }
-        if (botJsConfig['COIN_SWEEPER']) {
-          activeUserBot = `ALL====${'COIN_SWEEPER'}`;
-          var res = await runPythonScript('mainCoinSweeper.py', '', botJsConfig['COIN_SWEEPER'], '1');
-          console.log('COIN_SWEEPER end res===', res);
         }
         if (botJsConfig['BLUM']) {
           activeUserBot = `ALL====${'BLUM'}`;

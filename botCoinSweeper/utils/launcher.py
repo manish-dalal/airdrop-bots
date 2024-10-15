@@ -3,6 +3,7 @@ import glob
 import asyncio
 import argparse
 from itertools import cycle
+from pathlib import Path
 
 from pyrogram import Client
 from better_proxy import Proxy
@@ -25,13 +26,12 @@ Select an action:
 
 global tg_clients
 
-def get_session_names() -> list[str]:
-    session_names = sorted(glob.glob("sessions/*.session"))
-    session_names = [
-        os.path.splitext(os.path.basename(file))[0] for file in session_names
-    ]
-
-    return session_names
+def get_session_names(username) -> list[str]:
+	session_path = Path('sessions')
+	finalUser = (username or '*') + '.session'
+	session_files = session_path.glob(finalUser)
+	session_names = sorted([file.stem for file in session_files])
+	return session_names
 
 
 def get_proxies() -> list[Proxy]:
@@ -44,10 +44,10 @@ def get_proxies() -> list[Proxy]:
     return proxies
 
 
-async def get_tg_clients() -> list[Client]:
+async def get_tg_clients(username) -> list[Client]:
     global tg_clients
 
-    session_names = get_session_names()
+    session_names = get_session_names(username)
 
     if not session_names:
         raise FileNotFoundError("Not found session files")
@@ -71,9 +71,13 @@ async def get_tg_clients() -> list[Client]:
 
 async def process() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--action", type=int, help="Action to perform")
+    parser.add_argument('-a', '--action', type=int, help='Action to perform')
 
-    logger.info(f"Detected {len(get_session_names())} sessions | {len(get_proxies())} proxies")
+    parser.add_argument('-u', '--user')
+    username = parser.parse_args().user
+    logger.info(f"username== {username}")
+
+    logger.info(f"Detected {len(get_session_names(username))} sessions | {len(get_proxies())} proxies")
 
     action = parser.parse_args().action
 
@@ -103,11 +107,11 @@ async def process() -> None:
         #         break
 
         if ans == "y":
-            tg_clients = await get_tg_clients()
+            tg_clients = await get_tg_clients(username)
 
             await run_tasks(tg_clients=tg_clients)
         else:
-            tg_clients = await get_tg_clients()
+            tg_clients = await get_tg_clients(username)
             proxies = get_proxies()
             await run_tapper1(tg_clients=tg_clients, proxies=proxies)
     elif action == 3:
