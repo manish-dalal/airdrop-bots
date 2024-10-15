@@ -98,22 +98,22 @@ const clicker = async () => {
     isBotRuning = true;
     try {
       for (const user of users) {
-        if (botJsConfig['MMPRO'] && !(defaultDisabledUser['MMPRO'] || []).includes(user)) {
+        if (botJsConfig['MMPRO'] && !(botDisabledU['MMPRO'] || []).includes(user)) {
           activeUserBot = `${user}====${'MMPRO'}`;
           var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
           console.log('mainMMProBump 2 end res===', res);
         }
-        if (botJsConfig['MOON_BIX'] && !(defaultDisabledUser['MOON_BIX'] || []).includes(user)) {
+        if (botJsConfig['MOON_BIX'] && !(botDisabledU['MOON_BIX'] || []).includes(user)) {
           activeUserBot = `${user}====${'MOON_BIX'}`;
           var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
           console.log('mainMoonbix 4 end res===', res);
         }
-        if (botJsConfig['MEMEFI'] && !(defaultDisabledUser['MEMEFI'] || []).includes(user)) {
+        if (botJsConfig['MEMEFI'] && !(botDisabledU['MEMEFI'] || []).includes(user)) {
           activeUserBot = `${user}====${'MEMEFI'}`;
           var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
           console.log('mainMemeFi 5 end res===', res);
         }
-        if (botJsConfig['COIN_SWEEPER'] && !(defaultDisabledUser['COIN_SWEEPER'] || []).includes(user)) {
+        if (botJsConfig['COIN_SWEEPER'] && !(botDisabledU['COIN_SWEEPER'] || []).includes(user)) {
           activeUserBot = `${user}====${'COIN_SWEEPER'}`;
           var res = await runPythonScript('mainCoinSweeper.py', user, botJsConfig['COIN_SWEEPER'], '1');
           console.log('COIN_SWEEPER end res===', res);
@@ -154,22 +154,22 @@ const startBot = async () => {
       isBotRuning = true;
       try {
         for (const user of users) {
-          if (botJsConfig['MMPRO'] && !(defaultDisabledUser['MMPRO'] || []).includes(user)) {
+          if (botJsConfig['MMPRO'] && !(botDisabledU['MMPRO'] || []).includes(user)) {
             activeUserBot = `${user}====${'MMPRO'}`;
             var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
             console.log('mainMMProBump 2 end res===', res);
           }
-          if (botJsConfig['MOON_BIX'] && !(defaultDisabledUser['MOON_BIX'] || []).includes(user)) {
+          if (botJsConfig['MOON_BIX'] && !(botDisabledU['MOON_BIX'] || []).includes(user)) {
             activeUserBot = `${user}====${'MOON_BIX'}`;
             var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
             console.log('mainMoonbix 4 end res===', res);
           }
-          if (botJsConfig['MEMEFI'] && !(defaultDisabledUser['MEMEFI'] || []).includes(user)) {
+          if (botJsConfig['MEMEFI'] && !(botDisabledU['MEMEFI'] || []).includes(user)) {
             activeUserBot = `${user}====${'MEMEFI'}`;
             var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
             console.log('mainMemeFi 5 end res===', res);
           }
-          if (botJsConfig['COIN_SWEEPER'] && !(defaultDisabledUser['COIN_SWEEPER'] || []).includes(user)) {
+          if (botJsConfig['COIN_SWEEPER'] && !(botDisabledU['COIN_SWEEPER'] || []).includes(user)) {
             activeUserBot = `${user}====${'COIN_SWEEPER'}`;
             var res = await runPythonScript('mainCoinSweeper.py', user, botJsConfig['COIN_SWEEPER'], '1');
             console.log('COIN_SWEEPER end res===', res);
