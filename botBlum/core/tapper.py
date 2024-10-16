@@ -319,6 +319,7 @@ class Tapper:
                 'Token Burning: How & Why?': 'ONFIRE',
                 'Bitcoin Rainbow Chart?': 'SOBLUM',
                 'Crypto Terms. Part 1': 'BLUMEXPLORER',
+                'How to trade Perps?': 'CRYPTOFAN',
                 'Play track & type track name': 'Blum - Big City Life'
 
             }
