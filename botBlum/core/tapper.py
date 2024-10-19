@@ -320,6 +320,8 @@ class Tapper:
                 'Bitcoin Rainbow Chart?': 'SOBLUM',
                 'Crypto Terms. Part 1': 'BLUMEXPLORER',
                 'How to trade Perps?': 'CRYPTOFAN',
+                'Sharding Explained': 'BLUMTASTIC',
+                'DeFi Explained': 'BLUMFORCE',
                 'Play track & type track name': 'Blum - Big City Life'
 
             }
