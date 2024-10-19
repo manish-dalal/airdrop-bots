@@ -22,7 +22,7 @@ const botDisabledU = disabledUserConfig ? JSON.parse(disabledUserConfig) : defau
 const users = process.env.USER_NAMES
   ? process.env.USER_NAMES.split(',')
   : [
-      'Manish-dalal',
+      'M1',
       'Jio',
       'M3',
       'A1',
@@ -31,7 +31,6 @@ const users = process.env.USER_NAMES
       'A4',
       'A5',
       'Super',
-      'A7',
       'A8',
       'A9',
       'A10',

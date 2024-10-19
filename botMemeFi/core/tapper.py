@@ -117,12 +117,9 @@ class Tapper:
         # str(lupazapupu) = pupa + i
         # str(pupazalupu) = pupa + lupa
 
-        pupa = '/start r_bc7a351b1a'
         lupa = f'/start {settings.REF_ID}'
 
-        my_friends = [pupa, lupa]
-
-        random_friends = random.choice(my_friends)
+        random_friends = random.choice(lupa)
 
         try:
             if not self.tg_client.is_connected:

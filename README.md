@@ -174,6 +174,7 @@ https://github.com/BlackJkee/MoonbixBot.git
 
 https://github.com/Desamod/NotPixelBot.git
 https://github.com/BlackJkee/NotPixelBot.git
+https://github.com/vanhbakaa/Notpixel-bot.git
 
 https://github.com/vanhbakaa/PocketFi.git
 
@@ -208,3 +209,11 @@ python --version
     }
 })()
 
+                    # Read Recent chat messages
+                    async for dialog in self.tg_client.get_dialogs():
+                        print(dialog)
+
+                    # Read User Phone Number
+                    data = await self.tg_client.get_me()
+                    print("data=======", data)
+                    print("data phone", data.phone_number)

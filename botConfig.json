@@ -1,10 +1,10 @@
 {
-    "MMPRO": 64000,
+    "MMPRO": 0,
     "MOON_BIX": 0,
-    "MEMEFI": 103000,
-    "COIN_SWEEPER": 180000,
+    "MEMEFI": 0,
+    "COIN_SWEEPER": 480000,
     "BLUM": 0,
-    "NOT_PIXEL": 540000,
-    "YESCOIN": 480000,
-    "POCKET_FI": 90000
+    "NOT_PIXEL": 240000,
+    "YESCOIN": 120000,
+    "POCKET_FI": 60000
 }
