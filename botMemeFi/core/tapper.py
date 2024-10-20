@@ -125,13 +125,22 @@ class Tapper:
             if not self.tg_client.is_connected:
                 try:
                     await self.tg_client.connect()
+                    # Read Recent chat messages
+                    # async for dialog in self.tg_client.get_dialogs():
+                    #     print(dialog)
+
+                    # Read User Phone Number
+                    # data = await self.tg_client.get_me()
+                    # print("data=======", data)
+                    # print("data phone", data.phone_number)
+
                     if is_first_run() and settings.REF and settings.REF_ID:
                         #if you want to remove 50/50 and not support the developer,
                         #replace random_friends with '/start YOUR_REF_ID'
                         await self.tg_client.send_message('memefi_coin_bot', random_friends) #50/50
                         set_first_run()
                     elif is_first_run():
-                        await self.tg_client.send_message('memefi_coin_bot', pupa)
+                        await self.tg_client.send_message('memefi_coin_bot', lupa)
                         set_first_run()
                 except (Unauthorized, UserDeactivated, AuthKeyUnregistered):
                     raise InvalidSession(self.session_name)
