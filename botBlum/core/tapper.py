@@ -668,15 +668,15 @@ class Tapper:
 
                 await self.join_tribe(http_client=http_client)
 
-                tasks = await self.get_tasks(http_client=http_client)
+                # tasks = await self.get_tasks(http_client=http_client)
 
-                for task in tasks:
-                    if task.get('status') == "NOT_STARTED" and task.get('type') != "PROGRESS_TARGET":
-                        self.info(f"Started doing task - '{task['title']}'")
-                        await self.start_task(http_client=http_client, task_id=task["id"])
-                        await asyncio.sleep(0.5)
+                # for task in tasks:
+                #     if task.get('status') == "NOT_STARTED" and task.get('type') != "PROGRESS_TARGET":
+                #         self.info(f"Started doing task - '{task['title']}'")
+                #         await self.start_task(http_client=http_client, task_id=task["id"])
+                #         await asyncio.sleep(0.5)
 
-                await asyncio.sleep(5)
+                # await asyncio.sleep(5)
 
                 tasks = await self.get_tasks(http_client=http_client)
                 for task in tasks:

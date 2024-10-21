@@ -22,7 +22,7 @@ class Settings(BaseSettings):
                                       6578955397, 737065053, 347622105, 446378180, 379402843, 6914611412, 1325258259, 175225616, 2107125948, 1811879982, 5465341011, 1678134459]
 
     NIGHT_MODE: bool = False
-    SLEEP_TIME: list[int] = [0, 7] # your time zone
+    SLEEP_TIME: list[int] = [0, 0] # your time zone
 
     DELAY_EACH_ACCOUNT: list[int] = [10,15]
     SLEEP_TIME_BETWEEN_EACH_ROUND: list[int] = [1000, 1500]

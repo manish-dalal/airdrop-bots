@@ -32,8 +32,8 @@ Select an action:
 """
 
 
-def get_session_names(username) -> list[str]:
-	session_path = Path('sessions')
+def get_session_names(sessionDir, username) -> list[str]:
+	session_path = Path(sessionDir or 'sessions')
 	finalUser = (username or '*') + '.session'
 	session_files = session_path.glob(finalUser)
 	session_names = sorted([file.stem for file in session_files])
@@ -48,17 +48,20 @@ def get_proxies() -> list[Proxy]:
 
 	return proxies
 
-async def get_tg_clients(username) -> list[Client]:
-	session_names = get_session_names(username)
+async def get_tg_clients(sessionDir, username) -> list[Client]:
+	session_names = get_session_names(sessionDir, username)
 
 	if not session_names:
 		raise FileNotFoundError("Not found session files")
 
+	tempDir = sessionDir or 'sessions'
+	sdir = tempDir + '/'
+	
 	tg_clients = [Client(
 		name=session_name,
 		api_id=settings.API_ID,
 		api_hash=settings.API_HASH,
-		workdir='sessions/',
+		workdir=sdir,
 		plugins=dict(root='bot/plugins')
 	) for session_name in session_names]
 
@@ -89,11 +92,13 @@ async def process() -> None:
 		return
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-a', '--action', type=int, help='Action to perform')
+	parser.add_argument('-sd', '--sessionDir')
 
 	parser.add_argument('-u', '--user')
 	username = parser.parse_args().user
 	logger.info(f"username== {username}")
-	logger.info(f"Detected {len(get_session_names(username))} sessions | {len(get_proxies())} proxies")
+	sessionDir = parser.parse_args().sessionDir or ''
+	logger.info(f"Detected {len(get_session_names(sessionDir, username))} sessions | {len(get_proxies())} proxies")
 
 	action = parser.parse_args().action
 
@@ -114,6 +119,6 @@ async def process() -> None:
 	if action == 1:
 		await register_sessions()
 	elif action == 2:
-		tg_clients = await get_tg_clients(username)
+		tg_clients = await get_tg_clients(sessionDir, username)
 
 		await run_clients(tg_clients=tg_clients)

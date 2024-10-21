@@ -2,6 +2,7 @@ import os
 import glob
 import asyncio
 import argparse
+from pathlib import Path
 from itertools import cycle
 
 from pyrogram import Client
@@ -26,13 +27,12 @@ Select an action:
 
 global tg_clients
 
-def get_session_names() -> list[str]:
-    session_names = sorted(glob.glob("sessions/*.session"))
-    session_names = [
-        os.path.splitext(os.path.basename(file))[0] for file in session_names
-    ]
-
-    return session_names
+def get_session_names(sessionDir, username) -> list[str]:
+	session_path = Path(sessionDir or 'sessions')
+	finalUser = (username or '*') + '.session'
+	session_files = session_path.glob(finalUser)
+	session_names = sorted([file.stem for file in session_files])
+	return session_names
 
 
 def get_proxies() -> list[Proxy]:
@@ -45,10 +45,10 @@ def get_proxies() -> list[Proxy]:
     return proxies
 
 
-async def get_tg_clients() -> list[Client]:
+async def get_tg_clients(sessionDir, username) -> list[Client]:
     global tg_clients
 
-    session_names = get_session_names()
+    session_names = get_session_names(sessionDir, username)
 
     if not session_names:
         raise FileNotFoundError("Not found session files")
@@ -56,12 +56,14 @@ async def get_tg_clients() -> list[Client]:
     if not settings.API_ID or not settings.API_HASH:
         raise ValueError("API_ID and API_HASH not found in the .env file.")
 
+    tempDir = sessionDir or 'sessions'
+    sdir = tempDir + '/'
     tg_clients = [
         Client(
             name=session_name,
             api_id=settings.API_ID,
             api_hash=settings.API_HASH,
-            workdir="sessions/",
+            workdir=sdir,
             plugins=dict(root="bot/plugins"),
         )
         for session_name in session_names
@@ -73,11 +75,16 @@ async def get_tg_clients() -> list[Client]:
 async def process() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--action", type=int, help="Action to perform")
+    parser.add_argument('-u', '--user')
+    parser.add_argument('-sd', '--sessionDir')
     if check_base_url() is False:
         sys.exit(
             "Detected api change! Stoped the bot for safety. Contact me here to update the bot: https://t.me/vanhbakaaa")
 
-    logger.info(f"Detected {len(get_session_names())} sessions | {len(get_proxies())} proxies")
+    username = parser.parse_args().user
+    logger.info(f"username== {username}")
+    sessionDir = parser.parse_args().sessionDir or ''
+    logger.info(f"Detected {len(get_session_names(sessionDir, username))} sessions | {len(get_proxies())} proxies")
 
     action = parser.parse_args().action
 
@@ -98,7 +105,7 @@ async def process() -> None:
     if action == 2:
         await register_sessions()
     elif action == 1:
-        tg_clients = await get_tg_clients()
+        tg_clients = await get_tg_clients(sessionDir, username)
 
         await run_tasks(tg_clients=tg_clients)
 

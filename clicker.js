@@ -10,7 +10,7 @@ const defaultDisabledUser = {
   MMPRO: [],
   MOON_BIX: [],
   MEMEFI: [],
-  COIN_SWEEPER: ['M3', 'A1', 'A3', 'A8', 'A9', 'AAI2', 'AI2'],
+  COIN_SWEEPER: ['M3', 'A1', 'A3', 'A8', 'A9', 'AI2'],
   BLUM: [],
   NOT_PIXEL: [],
   YESCOIN: [],
@@ -19,39 +19,26 @@ const defaultDisabledUser = {
 const disabledUserConfig = process.env.BOT_DISABLE_USERS || '';
 const botDisabledU = disabledUserConfig ? JSON.parse(disabledUserConfig) : defaultDisabledUser;
 
-const users = process.env.USER_NAMES
-  ? process.env.USER_NAMES.split(',')
-  : [
-      'M1',
-      'Jio',
-      'M3',
-      'A1',
-      'A2',
-      'A3',
-      'A4',
-      'A5',
-      'Super',
-      'A8',
-      'A9',
-      'A10',
-      'AI2',
-      'AI3',
-      'AI4',
-    ];
+const users1 = ['M1', 'Jio', 'M3', 'Super', 'AI2', 'AI3', 'AI4'];
 
-let activeUserBot = '';
+const users2 = ['A1', 'A2', 'A3', 'A4', 'A5', 'A8', 'A9', 'A10'];
+
+let activeUserBot1 = '';
+let activeUserBot2 = '';
 const getActiveUserBot = () => {
-  const [activeUser = '', runingBot = ''] = activeUserBot.split('====');
-  return { activeUser, runingBot };
+  return { activeUserBot1, activeUserBot2 };
 };
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const runPythonScript = (filename, user = '', timeout = 480000, action = '2') => {
+const runPythonScript = (filename, user = '', timeout = 480000, action = '2', sessionDir = 'sessions') => {
   return new Promise(async (resolve, reject) => {
     try {
-      const arguments = user ? [filename, '-a', action, '-u', user] : [filename, '-a', action];
+      const arguments = [filename, '-a', action, '-sd', sessionDir];
+      if (user) {
+        arguments.push('-u', user);
+      }
       const python = spawn('python', arguments);
       const timeoutRf = setTimeout(() => {
         python.kill();
@@ -92,106 +79,64 @@ const runPythonScript = (filename, user = '', timeout = 480000, action = '2') =>
 };
 
 let isBotRuning = false;
-const clicker = async () => {
-  if (!isBotRuning) {
-    isBotRuning = true;
-    try {
-      for (const user of users) {
-        if (botJsConfig['MMPRO'] && !(botDisabledU['MMPRO'] || []).includes(user)) {
-          activeUserBot = `${user}====${'MMPRO'}`;
-          var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
-          console.log('mainMMProBump 2 end res===', res);
-        }
-        if (botJsConfig['MOON_BIX'] && !(botDisabledU['MOON_BIX'] || []).includes(user)) {
-          activeUserBot = `${user}====${'MOON_BIX'}`;
-          var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
-          console.log('mainMoonbix 4 end res===', res);
-        }
-        if (botJsConfig['MEMEFI'] && !(botDisabledU['MEMEFI'] || []).includes(user)) {
-          activeUserBot = `${user}====${'MEMEFI'}`;
-          var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
-          console.log('mainMemeFi 5 end res===', res);
-        }
-        if (botJsConfig['COIN_SWEEPER'] && !(botDisabledU['COIN_SWEEPER'] || []).includes(user)) {
-          activeUserBot = `${user}====${'COIN_SWEEPER'}`;
-          var res = await runPythonScript('mainCoinSweeper.py', user, botJsConfig['COIN_SWEEPER'], '1');
-          console.log('COIN_SWEEPER end res===', res);
-        }
-      }
-      if (botJsConfig['POCKET_FI']) {
-        activeUserBot = `ALL====${'POCKET_FI'}`;
-        var res = await runPythonScript('mainPocketFi.py', '', botJsConfig['POCKET_FI'], '1');
-        console.log('POCKET_FI end res===', res);
-      }
-      if (botJsConfig['BLUM']) {
-        activeUserBot = `ALL====${'BLUM'}`;
-        var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
-        console.log('mainBlum end res===', res);
-      }
-      if (botJsConfig['NOT_PIXEL']) {
-        activeUserBot = `ALL====${'NOT_PIXEL'}`;
-        var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
-        console.log('mainNotPixel end res===', res);
-      }
-      if (botJsConfig['YESCOIN']) {
-        activeUserBot = `ALL====${'YESCOIN'}`;
-        var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
-        console.log('mainYesCoin 6 end res===', res);
-      }
-    } catch {
-      isBotRuning = false;
-    } finally {
-      isBotRuning = false;
-    }
-    return true;
-  }
-  return true;
-};
 const startBot = async () => {
+  const sessionsDir = 'sessions-1';
   for (const iterator of Array.from({ length: 999999 })) {
     if (!isBotRuning) {
       isBotRuning = true;
       try {
-        for (const user of users) {
+        for (const user of users1) {
           if (botJsConfig['MMPRO'] && !(botDisabledU['MMPRO'] || []).includes(user)) {
-            activeUserBot = `${user}====${'MMPRO'}`;
-            var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO']);
+            activeUserBot1 = `${user}====${'MMPRO'}`;
+            var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO'], '2', sessionsDir);
             console.log('mainMMProBump 2 end res===', res);
           }
           if (botJsConfig['MOON_BIX'] && !(botDisabledU['MOON_BIX'] || []).includes(user)) {
-            activeUserBot = `${user}====${'MOON_BIX'}`;
-            var res = await runPythonScript('mainMoonbix.py', user, botJsConfig['MOON_BIX'], '1');
+            activeUserBot1 = `${user}====${'MOON_BIX'}`;
+            var res = await runPythonScript(
+              'mainMoonbix.py',
+              user,
+              botJsConfig['MOON_BIX'],
+              '1',
+              sessionsDir
+            );
             console.log('mainMoonbix 4 end res===', res);
           }
           if (botJsConfig['MEMEFI'] && !(botDisabledU['MEMEFI'] || []).includes(user)) {
-            activeUserBot = `${user}====${'MEMEFI'}`;
-            var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1');
+            activeUserBot1 = `${user}====${'MEMEFI'}`;
+            var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1', sessionsDir);
             console.log('mainMemeFi 5 end res===', res);
           }
           if (botJsConfig['COIN_SWEEPER'] && !(botDisabledU['COIN_SWEEPER'] || []).includes(user)) {
-            activeUserBot = `${user}====${'COIN_SWEEPER'}`;
-            var res = await runPythonScript('mainCoinSweeper.py', user, botJsConfig['COIN_SWEEPER'], '1');
+            activeUserBot1 = `${user}====${'COIN_SWEEPER'}`;
+            var res = await runPythonScript(
+              'mainCoinSweeper.py',
+              user,
+              botJsConfig['COIN_SWEEPER'],
+              '1',
+              sessionsDir
+            );
             console.log('COIN_SWEEPER end res===', res);
           }
         }
         if (botJsConfig['POCKET_FI']) {
-          activeUserBot = `ALL====${'POCKET_FI'}`;
-          var res = await runPythonScript('mainPocketFi.py', '', botJsConfig['POCKET_FI'], '1');
+          activeUserBot1 = `ALL====${'POCKET_FI'}`;
+          var res = await runPythonScript('mainPocketFi.py', '', botJsConfig['POCKET_FI'], '1', sessionsDir);
           console.log('POCKET_FI end res===', res);
         }
         if (botJsConfig['BLUM']) {
-          activeUserBot = `ALL====${'BLUM'}`;
-          var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1');
+          activeUserBot1 = `ALL====${'BLUM'}`;
+          var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1', sessionsDir);
           console.log('mainBlum end res===', res);
         }
         if (botJsConfig['NOT_PIXEL']) {
-          activeUserBot = `ALL====${'NOT_PIXEL'}`;
-          var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1');
+          activeUserBot1 = `ALL====${'NOT_PIXEL'}`;
+          var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1', sessionsDir);
           console.log('mainNotPixel end res===', res);
         }
         if (botJsConfig['YESCOIN']) {
-          activeUserBot = `ALL====${'YESCOIN'}`;
-          var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN']);
+          activeUserBot1 = `ALL====${'YESCOIN'}`;
+          var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN'], '2', sessionsDir);
           console.log('mainYesCoin 6 end res===', res);
         }
       } catch {
@@ -206,4 +151,78 @@ const startBot = async () => {
   console.log('stattaus===', isBotRuning);
 };
 startBot();
-module.exports = { clicker, getActiveUserBot };
+
+let isBotRuning2 = false;
+const startBot2 = async () => {
+  const sessionsDir = 'sessions-2';
+  for (const iterator of Array.from({ length: 999999 })) {
+    if (!isBotRuning2) {
+      isBotRuning2 = true;
+      try {
+        for (const user of users2) {
+          if (botJsConfig['MMPRO'] && !(botDisabledU['MMPRO'] || []).includes(user)) {
+            activeUserBot2 = `${user}====${'MMPRO'}`;
+            var res = await runPythonScript('mainMMProBump.py', user, botJsConfig['MMPRO'], '2', sessionsDir);
+            console.log('mainMMProBump 2 end res===', res);
+          }
+          if (botJsConfig['MOON_BIX'] && !(botDisabledU['MOON_BIX'] || []).includes(user)) {
+            activeUserBot2 = `${user}====${'MOON_BIX'}`;
+            var res = await runPythonScript(
+              'mainMoonbix.py',
+              user,
+              botJsConfig['MOON_BIX'],
+              '1',
+              sessionsDir
+            );
+            console.log('mainMoonbix 4 end res===', res);
+          }
+          if (botJsConfig['MEMEFI'] && !(botDisabledU['MEMEFI'] || []).includes(user)) {
+            activeUserBot2 = `${user}====${'MEMEFI'}`;
+            var res = await runPythonScript('mainMemeFi.py', user, botJsConfig['MEMEFI'], '1', sessionsDir);
+            console.log('mainMemeFi 5 end res===', res);
+          }
+          if (botJsConfig['COIN_SWEEPER'] && !(botDisabledU['COIN_SWEEPER'] || []).includes(user)) {
+            activeUserBot2 = `${user}====${'COIN_SWEEPER'}`;
+            var res = await runPythonScript(
+              'mainCoinSweeper.py',
+              user,
+              botJsConfig['COIN_SWEEPER'],
+              '1',
+              sessionsDir
+            );
+            console.log('COIN_SWEEPER end res===', res);
+          }
+        }
+        if (botJsConfig['POCKET_FI']) {
+          activeUserBot2 = `ALL====${'POCKET_FI'}`;
+          var res = await runPythonScript('mainPocketFi.py', '', botJsConfig['POCKET_FI'], '1', sessionsDir);
+          console.log('POCKET_FI end res===', res);
+        }
+        if (botJsConfig['BLUM']) {
+          activeUserBot2 = `ALL====${'BLUM'}`;
+          var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1', sessionsDir);
+          console.log('mainBlum end res===', res);
+        }
+        if (botJsConfig['NOT_PIXEL']) {
+          activeUserBot2 = `ALL====${'NOT_PIXEL'}`;
+          var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1', sessionsDir);
+          console.log('mainNotPixel end res===', res);
+        }
+        if (botJsConfig['YESCOIN']) {
+          activeUserBot2 = `ALL====${'YESCOIN'}`;
+          var res = await runPythonScript('mainYesCoin.py', '', botJsConfig['YESCOIN'], '2', sessionsDir);
+          console.log('mainYesCoin 6 end res===', res);
+        }
+      } catch {
+        isBotRuning2 = false;
+      } finally {
+        isBotRuning2 = false;
+      }
+    } else {
+      await sleep(120000);
+    }
+  }
+  console.log('stattaus===', isBotRuning2);
+};
+setTimeout(startBot2, 8 * 240000)
+module.exports = { getActiveUserBot };

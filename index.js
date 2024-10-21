@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const methods = require('./clicker');
 const axios = require('axios');
 
-const { clicker, getActiveUserBot } = methods;
+const { getActiveUserBot } = methods;
 
 const app = express();
 app.set('port', process.env.PORT || 4000);
@@ -13,11 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-
-app.get('/airdrop/clicker', (req, res) => {
-  clicker();
-  res.send('clicker started');
-});
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
