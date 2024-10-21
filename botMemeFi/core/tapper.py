@@ -812,10 +812,12 @@ class Tapper:
 
                         if settings.WATCH_VIDEO:
                             task_json = await self.get_campaigns(http_client=http_client)
+                            print("task_json", len(task_json))
                             n = 0
-                            while n < 197:
+                            while n < len(task_json):
                                 campaigns_id = task_json[n]['id']
-                                if task_json is not None:
+                                print("ittt", n, task_json[n]['status'], task_json[n]['status'] == None)
+                                if task_json is not None and task_json[n]['status'] == None:
                                     tasks_list = await self.get_tasks_list(http_client=http_client,
                                                                            campaigns_id=campaigns_id)
                                     name = tasks_list[0]['name']
@@ -860,7 +862,7 @@ class Tapper:
                                                 logger.info(f"{self.session_name} "
                                                             f"| Video: <r>{name}</r> | Status: <g>{status}</g>")
                                                 await asyncio.sleep(delay=3)
-                                                n += 1
+                                n += 1
 
                     spins = profile_data.get('spinEnergyTotal', 0)
                     if settings.ROLL_CASINO:

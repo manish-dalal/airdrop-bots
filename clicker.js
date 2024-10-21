@@ -118,6 +118,11 @@ const startBot = async () => {
             );
             console.log('COIN_SWEEPER end res===', res);
           }
+          if (botJsConfig['NOT_PIXEL'] && !(botDisabledU['NOT_PIXEL'] || []).includes(user)) {
+            activeUserBot1 = `${user}====${'NOT_PIXEL'}`;
+            var res = await runPythonScript('mainNotPixel.py', user, botJsConfig['NOT_PIXEL'], '1', sessionsDir);
+            console.log('mainNotPixel end res===', res);
+          }
         }
         if (botJsConfig['POCKET_FI']) {
           activeUserBot1 = `ALL====${'POCKET_FI'}`;
@@ -128,11 +133,6 @@ const startBot = async () => {
           activeUserBot1 = `ALL====${'BLUM'}`;
           var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1', sessionsDir);
           console.log('mainBlum end res===', res);
-        }
-        if (botJsConfig['NOT_PIXEL']) {
-          activeUserBot1 = `ALL====${'NOT_PIXEL'}`;
-          var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1', sessionsDir);
-          console.log('mainNotPixel end res===', res);
         }
         if (botJsConfig['YESCOIN']) {
           activeUserBot1 = `ALL====${'YESCOIN'}`;
@@ -192,6 +192,11 @@ const startBot2 = async () => {
             );
             console.log('COIN_SWEEPER end res===', res);
           }
+          if (botJsConfig['NOT_PIXEL'] && !(botDisabledU['NOT_PIXEL'] || []).includes(user)) {
+            activeUserBot2 = `${user}====${'NOT_PIXEL'}`;
+            var res = await runPythonScript('mainNotPixel.py', user, botJsConfig['NOT_PIXEL'], '1', sessionsDir);
+            console.log('mainNotPixel end res===', res);
+          }
         }
         if (botJsConfig['POCKET_FI']) {
           activeUserBot2 = `ALL====${'POCKET_FI'}`;
@@ -202,11 +207,6 @@ const startBot2 = async () => {
           activeUserBot2 = `ALL====${'BLUM'}`;
           var res = await runPythonScript('mainBlum.py', '', botJsConfig['BLUM'], '1', sessionsDir);
           console.log('mainBlum end res===', res);
-        }
-        if (botJsConfig['NOT_PIXEL']) {
-          activeUserBot2 = `ALL====${'NOT_PIXEL'}`;
-          var res = await runPythonScript('mainNotPixel.py', '', botJsConfig['NOT_PIXEL'], '1', sessionsDir);
-          console.log('mainNotPixel end res===', res);
         }
         if (botJsConfig['YESCOIN']) {
           activeUserBot2 = `ALL====${'YESCOIN'}`;
